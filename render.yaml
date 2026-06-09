@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: shiro-backend-service
+    runtime: node
+    repo: https://github.com/your-username/shiro-bengaluru
+    branch: main
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DB_HOST
+        value: "" # Set your hosted MySQL host address
+      - key: DB_USER
+        value: "" # Set your hosted MySQL username
+      - key: DB_PASSWORD
+        value: "" # Set your hosted MySQL password
+      - key: DB_NAME
+        value: "shiro_db"
+      - key: DB_PORT
+        value: "3306"

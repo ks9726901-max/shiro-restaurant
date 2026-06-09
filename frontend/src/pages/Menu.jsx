@@ -1,0 +1,412 @@
+import React, { useState, useEffect } from 'react';
+import api from '../utils/api';
+import { Search, Leaf, Star, Sparkles } from 'lucide-react';
+
+const FALLBACK_CATEGORIES = [
+  { id: 1, name: 'Sushi & Sashimi' },
+  { id: 2, name: 'Dim Sum' },
+  { id: 3, name: 'Teppanyaki & Grills' },
+  { id: 4, name: 'Mains' },
+  { id: 5, name: 'Desserts' },
+  { id: 6, name: 'Craft Cocktails' }
+];
+
+const FALLBACK_ITEMS = [
+  {
+    id: 1,
+    category_id: 1,
+    name: 'Shiro Signature Maki',
+    description: 'Gold-leaf crispy prawn tempura, cream cheese, avocado, wrapped with spicy tuna and drizzled with unagi glaze.',
+    price: 850.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: true,
+    image_url: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 2,
+    category_id: 1,
+    name: 'Sake (Salmon) Sashimi',
+    description: 'Thick slices of fresh, premium Atlantic salmon, served on shaved ice with fresh wasabi and pickled ginger.',
+    price: 950.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 3,
+    category_id: 1,
+    name: 'Truffle Avocado Roll',
+    description: 'Creamy avocado, cucumber, asparagus, rolled in toasted sesame seeds and drizzled with house truffle oil.',
+    price: 650.00,
+    is_vegetarian: true,
+    is_vegan: true,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 4,
+    category_id: 2,
+    name: 'Crystal Truffle Dumpling',
+    description: 'Minced wild shiitake, button, and portobello mushrooms, flavored with truffle essence in a translucent wrapper.',
+    price: 550.00,
+    is_vegetarian: true,
+    is_vegan: false,
+    is_signature: true,
+    image_url: 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 5,
+    category_id: 2,
+    name: 'Classic Prawn Har Gow',
+    description: 'Succulent fresh prawns in a pleated translucent pastry skin, steamed to juicy perfection.',
+    price: 650.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 6,
+    category_id: 3,
+    name: 'Garlic Butter Prawns',
+    description: 'Jumbo prawns grilled on the iron flat-top, basted with rich garlic butter, sake, and chopped chives.',
+    price: 920.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: true,
+    image_url: 'https://images.unsplash.com/photo-1559737607-3578909a3a3b?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 7,
+    category_id: 3,
+    name: 'Hibachi Glazed Chicken',
+    description: 'Tender chicken breast glazed with a sweet and savory sweet-soy hibachi sauce, served with sesame bean sprouts.',
+    price: 720.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1598515214211-89d3e73ae83b?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 8,
+    category_id: 4,
+    name: 'Peking Duck (Half)',
+    description: 'Crispy, slow-roasted duck skin and tender meat served with hand-rolled steamed pancakes, julienned scallions, cucumbers, and rich hoisin sauce.',
+    price: 1800.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: true,
+    image_url: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 9,
+    category_id: 4,
+    name: 'Thai Green Curry (Veg)',
+    description: 'A rich coconut milk curry infused with galangal, lemongrass, sweet basil, Thai eggplant, baby corn, served with steamed Jasmine rice.',
+    price: 650.00,
+    is_vegetarian: true,
+    is_vegan: true,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 10,
+    category_id: 5,
+    name: 'Chocolate Cherry Dome',
+    description: 'Decadent 70% dark Belgian chocolate mousse shell, sour cherry compote filling, biscuit crunch base, finished with gold leaf dusting.',
+    price: 520.00,
+    is_vegetarian: true,
+    is_vegan: false,
+    is_signature: true,
+    image_url: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 11,
+    category_id: 5,
+    name: 'Zen Coconut Mousse',
+    description: 'Light coconut and white chocolate mousse shaped like a smooth garden pebble, served on cocoa sand with mango coulis.',
+    price: 480.00,
+    is_vegetarian: true,
+    is_vegan: false,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1511018556340-d16986a1c194?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 12,
+    category_id: 6,
+    name: 'Demonic Shiro',
+    description: 'Shiro’s famous cocktail: Japanese craft gin, dark blackberry shrub, fresh local lemon, sweet basil, topped with ginger beer.',
+    price: 750.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: true,
+    image_url: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  },
+  {
+    id: 13,
+    category_id: 6,
+    name: 'Zen Garden Collins',
+    description: 'Sake, cucumber juice, elderflower syrup, fresh mint leaves, carbonated club soda, served long with a cucumber ribbon.',
+    price: 680.00,
+    is_vegetarian: false,
+    is_vegan: false,
+    is_signature: false,
+    image_url: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=800&q=80',
+    is_available: true
+  }
+];
+
+const Menu = () => {
+  const [categories, setCategories] = useState([]);
+  const [items, setItems] = useState([]);
+  const [activeCategory, setActiveCategory] = useState(null);
+  
+  // Filters state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterVeg, setFilterVeg] = useState(false);
+  const [filterVegan, setFilterVegan] = useState(false);
+  const [filterSignature, setFilterSignature] = useState(false);
+  
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMenuData = async () => {
+      try {
+        setLoading(true);
+        const [catsRes, itemsRes] = await Promise.all([
+          api.get('/menu/categories'),
+          api.get('/menu/items')
+        ]);
+        
+        setCategories(catsRes.data.length ? catsRes.data : FALLBACK_CATEGORIES);
+        setItems(itemsRes.data.length ? itemsRes.data : FALLBACK_ITEMS);
+        
+        if (catsRes.data.length) {
+          setActiveCategory(catsRes.data[0].id);
+        } else {
+          setActiveCategory(FALLBACK_CATEGORIES[0].id);
+        }
+      } catch (err) {
+        console.warn('API error fetching menu. Using high-quality local fallbacks.');
+        setCategories(FALLBACK_CATEGORIES);
+        setItems(FALLBACK_ITEMS);
+        setActiveCategory(FALLBACK_CATEGORIES[0].id);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuData();
+  }, []);
+
+  // Filter items based on active category, search query, and toggle state switches
+  const filteredItems = items.filter((item) => {
+    // 1. Category Filter
+    if (activeCategory && item.category_id !== activeCategory) return false;
+    
+    // 2. Search Query Filter
+    if (
+      searchQuery &&
+      !item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+      !item.description.toLowerCase().includes(searchQuery.toLowerCase())
+    ) {
+      return false;
+    }
+
+    // 3. Dietary & Signature Toggles
+    if (filterVeg && !item.is_vegetarian) return false;
+    if (filterVegan && !item.is_vegan) return false;
+    if (filterSignature && !item.is_signature) return false;
+
+    // 4. Availability Check
+    if (!item.is_available) return false;
+
+    return true;
+  });
+
+  return (
+    <div className="bg-ebony min-h-screen pt-28 pb-20 text-stone">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        
+        {/* Header Title */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="text-[10px] tracking-[0.3em] text-gold uppercase font-semibold">Gastronomic Selection</span>
+          <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-wider mt-2 mb-4">
+            Our Menu
+          </h1>
+          <div className="w-20 h-0.5 bg-gold mx-auto mb-4" />
+          <p className="text-xs font-light text-stone-light">
+            Each culinary masterpiece merges the balance of traditional Asian flavors with premium local and imported ingredients.
+          </p>
+        </div>
+
+        {/* Search & Dietary Filters Area */}
+        <div className="bg-ebony-card border border-stone-border/40 p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+          {/* Search Box */}
+          <div className="relative flex-1 max-w-md">
+            <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-stone">
+              <Search className="w-4 h-4" />
+            </span>
+            <input
+              type="text"
+              placeholder="Search dishes or details..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-ebony-light border border-stone-border py-2.5 pl-10 pr-4 text-xs font-light text-white placeholder-stone focus:outline-none focus:border-gold transition-colors duration-300"
+            />
+          </div>
+
+          {/* Toggle Switches */}
+          <div className="flex flex-wrap gap-4 text-xs font-sans">
+            <button
+              onClick={() => setFilterVeg(!filterVeg)}
+              className={`flex items-center space-x-2 px-4 py-2 border transition-all duration-300 ${
+                filterVeg
+                  ? 'bg-gold/10 border-gold text-gold font-medium'
+                  : 'bg-ebony-light border-stone-border text-stone hover:border-gold/45 hover:text-gold-hover'
+              }`}
+            >
+              <Leaf className="w-3.5 h-3.5" />
+              <span>Vegetarian</span>
+            </button>
+
+            <button
+              onClick={() => setFilterVegan(!filterVegan)}
+              className={`flex items-center space-x-2 px-4 py-2 border transition-all duration-300 ${
+                filterVegan
+                  ? 'bg-gold/10 border-gold text-gold font-medium'
+                  : 'bg-ebony-light border-stone-border text-stone hover:border-gold/45 hover:text-gold-hover'
+              }`}
+            >
+              <Leaf className="w-3.5 h-3.5" />
+              <span>Vegan</span>
+            </button>
+
+            <button
+              onClick={() => setFilterSignature(!filterSignature)}
+              className={`flex items-center space-x-2 px-4 py-2 border transition-all duration-300 ${
+                filterSignature
+                  ? 'bg-gold/10 border-gold text-gold font-medium'
+                  : 'bg-ebony-light border-stone-border text-stone hover:border-gold/45 hover:text-gold-hover'
+              }`}
+            >
+              <Star className="w-3.5 h-3.5" />
+              <span>Signature</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Category Tabs */}
+        <div className="flex overflow-x-auto pb-4 mb-12 border-b border-stone-border/30 scrollbar-luxury gap-2 md:justify-center">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveCategory(cat.id)}
+              className={`px-6 py-3 shrink-0 font-serif text-sm tracking-wider uppercase transition-all duration-300 border-b-2 -mb-[18px] ${
+                activeCategory === cat.id
+                  ? 'border-gold text-gold font-bold'
+                  : 'border-transparent text-stone hover:text-gold-hover'
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Menu Items Grid */}
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gold" />
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="text-center py-20 border border-dashed border-stone-border/40 bg-ebony-card">
+            <p className="text-stone font-light">No dishes match your selected filters.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {filteredItems.map((item) => (
+              <div 
+                key={item.id} 
+                className="bg-ebony-card border border-stone-border/40 p-6 flex flex-col sm:flex-row gap-6 hover:border-gold/30 transition-all duration-500 hover:shadow-xl group"
+              >
+                {/* Image Container */}
+                <div className="relative w-full sm:w-36 h-36 shrink-0 bg-ebony-light border border-stone-border overflow-hidden">
+                  <img
+                    src={item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80'}
+                    alt={item.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-95"
+                  />
+                  
+                  {/* Badges on Top of Image */}
+                  <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
+                    {item.is_signature && (
+                      <span className="p-1 bg-gold text-ebony rounded-none shadow-md" title="Signature dish">
+                        <Sparkles className="w-3.5 h-3.5 fill-current" />
+                      </span>
+                    )}
+                    {item.is_vegetarian && (
+                      <span className="p-1 bg-green-900 text-green-300 border border-green-500/30 rounded-none shadow-md" title="Vegetarian">
+                        <Leaf className="w-3.5 h-3.5" />
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Details Container */}
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    {/* Header: Title & Price */}
+                    <div className="flex justify-between items-start gap-4 mb-2">
+                      <h3 className="font-serif text-lg font-semibold text-white tracking-wide group-hover:text-gold transition-colors duration-300">
+                        {item.name}
+                      </h3>
+                      <span className="font-serif text-gold font-medium text-lg whitespace-nowrap">
+                        ₹{parseFloat(item.price).toFixed(2)}
+                      </span>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-xs font-light leading-relaxed text-stone pr-4">
+                      {item.description || 'No description available for this luxury culinary creation.'}
+                    </p>
+                  </div>
+
+                  {/* Dietary Info Summary Bar */}
+                  <div className="mt-4 flex items-center space-x-3 text-[10px] tracking-wider uppercase text-stone-light">
+                    {item.is_vegan && (
+                      <span className="text-green-500">Vegan Choice</span>
+                    )}
+                    {item.is_vegetarian && !item.is_vegan && (
+                      <span className="text-green-400">Vegetarian Choice</span>
+                    )}
+                    {!item.is_vegetarian && (
+                      <span>Non-Vegetarian</span>
+                    )}
+                  </div>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        )}
+
+      </div>
+    </div>
+  );
+};
+
+export default Menu;
