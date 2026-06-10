@@ -182,6 +182,10 @@ const ensureArray = (val, fallback = []) => {
   return fallback;
 };
 
+// Aliases for clear alignment with requirements
+const fallbackCategories = FALLBACK_CATEGORIES;
+const fallbackMenu = FALLBACK_ITEMS;
+
 const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
@@ -198,14 +202,31 @@ const Menu = () => {
 
   useEffect(() => {
     const fetchMenuData = async () => {
+      const catsUrl = api.defaults.baseURL ? `${api.defaults.baseURL}/menu/categories` : '/api/menu/categories';
+      const itemsUrl = api.defaults.baseURL ? `${api.defaults.baseURL}/menu/items` : '/api/menu/items';
+      
       try {
         setLoading(true);
         setError(null);
+        
+        console.log(`[API Request] URL: ${catsUrl}`);
+        console.log(`[API Request] URL: ${itemsUrl}`);
+
         const [catsRes, itemsRes] = await Promise.all([
           api.get('/menu/categories'),
           api.get('/menu/items')
         ]);
         
+        // Log API URL, Response status, and Response body for categories
+        console.log(`[API Response] URL: ${catsUrl}`);
+        console.log(`Status: ${catsRes.status}`);
+        console.log('Body:', catsRes.data);
+
+        // Log API URL, Response status, and Response body for items
+        console.log(`[API Response] URL: ${itemsUrl}`);
+        console.log(`Status: ${itemsRes.status}`);
+        console.log('Body:', itemsRes.data);
+
         // Ensure fetched data is parsed to arrays safely
         const catsData = ensureArray(catsRes?.data, null);
         const itemsData = ensureArray(itemsRes?.data, null);
@@ -214,20 +235,32 @@ const Menu = () => {
           throw new Error('API response mismatch: expected arrays but did not receive array formatted data');
         }
 
-        setCategories(catsData.length ? catsData : FALLBACK_CATEGORIES);
-        setItems(itemsData.length ? itemsData : FALLBACK_ITEMS);
+        setCategories(catsData.length ? catsData : fallbackCategories);
+        setItems(itemsData.length ? itemsData : fallbackMenu);
         
         if (catsData.length) {
           setActiveCategory(catsData[0].id);
         } else {
-          setActiveCategory(FALLBACK_CATEGORIES[0].id);
+          setActiveCategory(fallbackCategories[0].id);
         }
       } catch (err) {
         console.warn('API error fetching menu. Using high-quality local fallbacks.', err);
-        setError('Failed to load menu');
-        setCategories(FALLBACK_CATEGORIES);
-        setItems(FALLBACK_ITEMS);
-        setActiveCategory(FALLBACK_CATEGORIES[0].id);
+        setError(err.message || 'Failed to load menu');
+        
+        // Log API URL, Response status, and Response body for errors
+        console.log(`[API Failure] URL: ${catsUrl} and ${itemsUrl}`);
+        if (err.response) {
+          console.log(`Status: ${err.response.status}`);
+          console.log('Body:', err.response.data);
+        } else {
+          console.log('Status: Offline or Network Error');
+          console.log('Body/Message:', err.message);
+        }
+
+        // Use fallbackMenu datasets when API is unavailable
+        setCategories(fallbackCategories);
+        setItems(fallbackMenu);
+        setActiveCategory(fallbackCategories[0].id);
       } finally {
         setLoading(false);
       }
@@ -236,9 +269,13 @@ const Menu = () => {
     fetchMenuData();
   }, []);
 
+  // Ensure menu data is always an array before using filter or map
+  const menuCategories = Array.isArray(categories) && categories.length > 0 ? categories : fallbackCategories;
+  const menuItems = Array.isArray(items) && items.length > 0 ? items : fallbackMenu;
+
   // Filter items based on active category, search query, and toggle state switches
-  const filteredItems = Array.isArray(items)
-    ? items.filter((item) => {
+  const filteredItems = Array.isArray(menuItems)
+    ? menuItems.filter((item) => {
         if (!item) return false;
         
         // 1. Category Filter
@@ -337,7 +374,7 @@ const Menu = () => {
 
         {/* Category Tabs */}
         <div className="flex overflow-x-auto pb-4 mb-12 border-b border-stone-border/30 scrollbar-luxury gap-2 md:justify-center">
-          {Array.isArray(categories) ? categories.map((cat) => (
+          {Array.isArray(menuCategories) ? menuCategories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
@@ -357,10 +394,6 @@ const Menu = () => {
           <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gold" />
             <p className="text-stone font-light animate-pulse text-sm">Loading menu...</p>
-          </div>
-        ) : error ? (
-          <div className="text-center py-20 border border-dashed border-red-500/30 bg-ebony-card">
-            <p className="text-red-400 font-light text-sm">{error}</p>
           </div>
         ) : !Array.isArray(filteredItems) || filteredItems.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-stone-border/40 bg-ebony-card">
