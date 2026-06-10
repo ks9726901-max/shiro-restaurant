@@ -170,6 +170,18 @@ const FALLBACK_ITEMS = [
   }
 ];
 
+const ensureArray = (val, fallback = []) => {
+  if (Array.isArray(val)) return val;
+  if (val && typeof val === 'object') {
+    if (Array.isArray(val.data)) return val.data;
+    if (Array.isArray(val.items)) return val.items;
+    if (Array.isArray(val.categories)) return val.categories;
+    const firstArrayKey = Object.keys(val).find(key => Array.isArray(val[key]));
+    if (firstArrayKey) return val[firstArrayKey];
+  }
+  return fallback;
+};
+
 const Menu = () => {
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
@@ -182,26 +194,37 @@ const Menu = () => {
   const [filterSignature, setFilterSignature] = useState(false);
   
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMenuData = async () => {
       try {
         setLoading(true);
+        setError(null);
         const [catsRes, itemsRes] = await Promise.all([
           api.get('/menu/categories'),
           api.get('/menu/items')
         ]);
         
-        setCategories(catsRes.data.length ? catsRes.data : FALLBACK_CATEGORIES);
-        setItems(itemsRes.data.length ? itemsRes.data : FALLBACK_ITEMS);
+        // Ensure fetched data is parsed to arrays safely
+        const catsData = ensureArray(catsRes?.data, null);
+        const itemsData = ensureArray(itemsRes?.data, null);
         
-        if (catsRes.data.length) {
-          setActiveCategory(catsRes.data[0].id);
+        if (!catsData || !itemsData) {
+          throw new Error('API response mismatch: expected arrays but did not receive array formatted data');
+        }
+
+        setCategories(catsData.length ? catsData : FALLBACK_CATEGORIES);
+        setItems(itemsData.length ? itemsData : FALLBACK_ITEMS);
+        
+        if (catsData.length) {
+          setActiveCategory(catsData[0].id);
         } else {
           setActiveCategory(FALLBACK_CATEGORIES[0].id);
         }
       } catch (err) {
-        console.warn('API error fetching menu. Using high-quality local fallbacks.');
+        console.warn('API error fetching menu. Using high-quality local fallbacks.', err);
+        setError('Failed to load menu');
         setCategories(FALLBACK_CATEGORIES);
         setItems(FALLBACK_ITEMS);
         setActiveCategory(FALLBACK_CATEGORIES[0].id);
@@ -214,29 +237,31 @@ const Menu = () => {
   }, []);
 
   // Filter items based on active category, search query, and toggle state switches
-  const filteredItems = items.filter((item) => {
-    // 1. Category Filter
-    if (activeCategory && item.category_id !== activeCategory) return false;
-    
-    // 2. Search Query Filter
-    if (
-      searchQuery &&
-      !item.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      !item.description.toLowerCase().includes(searchQuery.toLowerCase())
-    ) {
-      return false;
-    }
+  const filteredItems = Array.isArray(items)
+    ? items.filter((item) => {
+        if (!item) return false;
+        
+        // 1. Category Filter
+        if (activeCategory && item.category_id !== activeCategory) return false;
+        
+        // 2. Search Query Filter
+        if (searchQuery) {
+          const nameMatch = item.name ? item.name.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+          const descMatch = item.description ? item.description.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+          if (!nameMatch && !descMatch) return false;
+        }
 
-    // 3. Dietary & Signature Toggles
-    if (filterVeg && !item.is_vegetarian) return false;
-    if (filterVegan && !item.is_vegan) return false;
-    if (filterSignature && !item.is_signature) return false;
+        // 3. Dietary & Signature Toggles
+        if (filterVeg && !item.is_vegetarian) return false;
+        if (filterVegan && !item.is_vegan) return false;
+        if (filterSignature && !item.is_signature) return false;
 
-    // 4. Availability Check
-    if (!item.is_available) return false;
+        // 4. Availability Check
+        if (!item.is_available) return false;
 
-    return true;
-  });
+        return true;
+      })
+    : [];
 
   return (
     <div className="bg-ebony min-h-screen pt-28 pb-20 text-stone">
@@ -312,7 +337,7 @@ const Menu = () => {
 
         {/* Category Tabs */}
         <div className="flex overflow-x-auto pb-4 mb-12 border-b border-stone-border/30 scrollbar-luxury gap-2 md:justify-center">
-          {categories.map((cat) => (
+          {Array.isArray(categories) ? categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id)}
@@ -324,15 +349,20 @@ const Menu = () => {
             >
               {cat.name}
             </button>
-          ))}
+          )) : null}
         </div>
 
         {/* Menu Items Grid */}
         {loading ? (
-          <div className="flex justify-center py-20">
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
             <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gold" />
+            <p className="text-stone font-light animate-pulse text-sm">Loading menu...</p>
           </div>
-        ) : filteredItems.length === 0 ? (
+        ) : error ? (
+          <div className="text-center py-20 border border-dashed border-red-500/30 bg-ebony-card">
+            <p className="text-red-400 font-light text-sm">{error}</p>
+          </div>
+        ) : !Array.isArray(filteredItems) || filteredItems.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-stone-border/40 bg-ebony-card">
             <p className="text-stone font-light">No dishes match your selected filters.</p>
           </div>
