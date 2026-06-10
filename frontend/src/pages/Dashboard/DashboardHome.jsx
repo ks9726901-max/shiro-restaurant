@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
-import { CalendarRange, Utensils, CheckCircle2, Clock, CalendarDays } from 'lucide-react';
+import { CalendarRange, Utensils, CheckCircle2, Clock, CalendarDays, AlertCircle } from 'lucide-react';
 
 const FALLBACK_SUMMARY = {
   totalReservations: 12,
@@ -10,28 +10,47 @@ const FALLBACK_SUMMARY = {
 };
 
 const FALLBACK_TODAY_BOOKINGS = [
-  { id: 1, customer_name: 'Ananya Sharma', customer_phone: '+919876543210', reservation_date: '2026-06-10', reservation_time: '19:30:00', guest_count: 4, status: 'confirmed' },
-  { id: 2, customer_name: 'Vikram Malhotra', customer_phone: '+919123456789', reservation_date: '2026-06-10', reservation_time: '21:00:00', guest_count: 2, status: 'pending' }
+  { id: 1, customer_name: 'Ananya Sharma (Demo)', customer_phone: '+919876543210', reservation_date: '2026-06-10', reservation_time: '19:30:00', guest_count: 4, status: 'confirmed' },
+  { id: 2, customer_name: 'Vikram Malhotra (Demo)', customer_phone: '+919123456789', reservation_date: '2026-06-10', reservation_time: '21:00:00', guest_count: 2, status: 'pending' }
 ];
 
 const DashboardHome = () => {
   const [summary, setSummary] = useState(FALLBACK_SUMMARY);
   const [todayBookings, setTodayBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const todayStr = new Date().toISOString().split('T')[0];
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
+      setError(null);
       const [sumRes, bookingsRes] = await Promise.all([
         api.get('/reports/summary'),
         api.get(`/reservations?date=${todayStr}`)
       ]);
-      setSummary(sumRes.data);
-      setTodayBookings(bookingsRes.data);
+      
+      let sumData = sumRes?.data;
+      if (!sumData || typeof sumData !== 'object' || Array.isArray(sumData)) {
+        sumData = FALLBACK_SUMMARY;
+      }
+      
+      let bookingsData = bookingsRes?.data;
+      if (bookingsData && typeof bookingsData === 'object' && !Array.isArray(bookingsData)) {
+        if (Array.isArray(bookingsData.data)) bookingsData = bookingsData.data;
+        else if (Array.isArray(bookingsData.reservations)) bookingsData = bookingsData.reservations;
+        else bookingsData = [];
+      }
+      if (!Array.isArray(bookingsData)) {
+        bookingsData = [];
+      }
+
+      setSummary(sumData);
+      setTodayBookings(bookingsData.length ? bookingsData : FALLBACK_TODAY_BOOKINGS);
     } catch (err) {
-      console.warn('API error fetching dashboard overview. Using mock fallbacks.');
+      console.warn('API error fetching dashboard overview. Using mock fallbacks.', err);
+      setError('Offline mode: Using local demo statistics and reservations.');
       setSummary(FALLBACK_SUMMARY);
       setTodayBookings(FALLBACK_TODAY_BOOKINGS);
     } finally {
@@ -55,18 +74,18 @@ const DashboardHome = () => {
       console.error('Failed to change reservation status:', err);
       // Local updates for testing without working MySQL
       setTodayBookings(prev => 
-        prev.map(b => b.id === id ? { ...b, status: newStatus } : b)
+        (Array.isArray(prev) ? prev : []).map(b => b.id === id ? { ...b, status: newStatus } : b)
       );
       if (newStatus === 'confirmed') {
         setSummary(prev => ({
           ...prev,
-          confirmedReservations: prev.confirmedReservations + 1,
-          pendingReservations: prev.pendingReservations - 1
+          confirmedReservations: (prev.confirmedReservations || 0) + 1,
+          pendingReservations: (prev.pendingReservations || 0) - 1
         }));
       } else if (newStatus === 'cancelled') {
         setSummary(prev => ({
           ...prev,
-          pendingReservations: prev.pendingReservations - 1
+          pendingReservations: (prev.pendingReservations || 0) - 1
         }));
       }
     }
@@ -83,18 +102,28 @@ const DashboardHome = () => {
     <div className="space-y-10">
       
       {/* Welcome Header */}
-      <div>
-        <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
-          Overview Dashboard
-        </h1>
-        <p className="text-xs font-light text-stone mt-1">
-          Welcome back. Here is the operational summary for Shiro Bengaluru.
-        </p>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
+            Overview Dashboard
+          </h1>
+          <p className="text-xs font-light text-stone mt-1">
+            Welcome back. Here is the operational summary for Shiro Bengaluru.
+          </p>
+        </div>
       </div>
+
+      {/* Offline Status Warning */}
+      {error && (
+        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {statCards.map((card, idx) => (
+        {(Array.isArray(statCards) ? statCards : []).map((card, idx) => (
           <div key={idx} className={`p-6 border bg-ebony-card flex items-center justify-between ${card.color}`}>
             <div>
               <p className="text-[10px] tracking-widest uppercase text-stone-light">{card.label}</p>
@@ -123,7 +152,7 @@ const DashboardHome = () => {
           <div className="flex justify-center py-10">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
           </div>
-        ) : todayBookings.length === 0 ? (
+        ) : !Array.isArray(todayBookings) || todayBookings.length === 0 ? (
           <div className="text-center py-12 text-stone font-light text-xs border border-dashed border-stone-border/20">
             No table reservations scheduled for today.
           </div>
@@ -141,11 +170,11 @@ const DashboardHome = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-border/30">
-                {todayBookings.map((res) => (
+                {(Array.isArray(todayBookings) ? todayBookings : []).map((res) => (
                   <tr key={res.id} className="text-stone-light hover:bg-ebony-light/50 transition-colors">
                     <td className="py-4 font-semibold text-white">{res.customer_name}</td>
                     <td className="py-4">{res.customer_phone}</td>
-                    <td className="py-4 font-serif text-gold">{res.reservation_time.slice(0, 5)}</td>
+                    <td className="py-4 font-serif text-gold">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</td>
                     <td className="py-4">{res.guest_count} persons</td>
                     <td className="py-4">
                       <span className={`px-2 py-0.5 font-bold uppercase text-[9px] tracking-widest ${

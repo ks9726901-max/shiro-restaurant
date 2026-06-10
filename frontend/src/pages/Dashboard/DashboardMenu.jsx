@@ -46,14 +46,37 @@ const DashboardMenu = () => {
   const loadMenuData = async () => {
     try {
       setLoading(true);
+      setError('');
       const [catsRes, itemsRes] = await Promise.all([
         api.get('/menu/categories'),
         api.get('/menu/items')
       ]);
-      setCategories(catsRes.data.length ? catsRes.data : FALLBACK_CATEGORIES);
-      setItems(itemsRes.data.length ? itemsRes.data : FALLBACK_ITEMS);
+      
+      let catsData = catsRes?.data;
+      if (catsData && typeof catsData === 'object' && !Array.isArray(catsData)) {
+        if (Array.isArray(catsData.data)) catsData = catsData.data;
+        else if (Array.isArray(catsData.categories)) catsData = catsData.categories;
+        else catsData = [];
+      }
+      if (!Array.isArray(catsData)) {
+        catsData = [];
+      }
+
+      let itemsData = itemsRes?.data;
+      if (itemsData && typeof itemsData === 'object' && !Array.isArray(itemsData)) {
+        if (Array.isArray(itemsData.data)) itemsData = itemsData.data;
+        else if (Array.isArray(itemsData.items)) itemsData = itemsData.items;
+        else itemsData = [];
+      }
+      if (!Array.isArray(itemsData)) {
+        itemsData = [];
+      }
+
+      setCategories(catsData.length ? catsData : FALLBACK_CATEGORIES);
+      setItems(itemsData.length ? itemsData : FALLBACK_ITEMS);
     } catch (err) {
-      console.warn('API error fetching menu manager data. Using local mock fallbacks.');
+      console.warn('API error fetching menu manager data. Using local mock fallbacks.', err);
+      setError('Offline mode: Using local demo menu data.');
       setCategories(FALLBACK_CATEGORIES);
       setItems(FALLBACK_ITEMS);
     } finally {
@@ -69,7 +92,7 @@ const DashboardMenu = () => {
   const handleAddItemClick = () => {
     setEditingItem(null);
     setItemForm({
-      category_id: categories.length ? categories[0].id : '',
+      category_id: (Array.isArray(categories) && categories.length) ? categories[0].id : '',
       name: '',
       description: '',
       price: '',
@@ -122,15 +145,17 @@ const DashboardMenu = () => {
     } catch (err) {
       console.error('Failed to submit menu item:', err);
       // Local fallback mock update
+      const validCategories = Array.isArray(categories) ? categories : [];
       if (editingItem) {
-        setItems(prev => prev.map(it => it.id === editingItem.id ? { ...it, ...itemForm, category_name: categories.find(c => c.id === parseInt(itemForm.category_id))?.name } : it));
+        setItems(prev => (Array.isArray(prev) ? prev : []).map(it => it.id === editingItem.id ? { ...it, ...itemForm, category_name: validCategories.find(c => c.id === parseInt(itemForm.category_id))?.name } : it));
       } else {
+        const validItems = Array.isArray(items) ? items : [];
         const newItem = {
-          id: Math.max(...items.map(i => i.id), 0) + 1,
+          id: Math.max(...validItems.map(i => i.id), 0) + 1,
           ...itemForm,
-          category_name: categories.find(c => c.id === parseInt(itemForm.category_id))?.name
+          category_name: validCategories.find(c => c.id === parseInt(itemForm.category_id))?.name
         };
-        setItems(prev => [...prev, newItem]);
+        setItems(prev => [...(Array.isArray(prev) ? prev : []), newItem]);
       }
       setItemModalOpen(false);
     }
@@ -145,7 +170,7 @@ const DashboardMenu = () => {
     } catch (err) {
       console.error('Failed to delete item:', err);
       // Local fallback mock update
-      setItems(prev => prev.filter(it => it.id !== id));
+      setItems(prev => (Array.isArray(prev) ? prev : []).filter(it => it.id !== id));
     }
   };
 
@@ -162,14 +187,18 @@ const DashboardMenu = () => {
     } catch (err) {
       console.error('Failed to create category:', err);
       // Local fallback mock update
+      const validCategories = Array.isArray(categories) ? categories : [];
       const newCat = {
-        id: Math.max(...categories.map(c => c.id), 0) + 1,
+        id: Math.max(...validCategories.map(c => c.id), 0) + 1,
         ...categoryForm
       };
-      setCategories(prev => [...prev, newCat]);
+      setCategories(prev => [...(Array.isArray(prev) ? prev : []), newCat]);
       setCategoryModalOpen(false);
     }
   };
+
+  const menuCategories = Array.isArray(categories) ? categories : FALLBACK_CATEGORIES;
+  const menuItems = Array.isArray(items) ? items : FALLBACK_ITEMS;
 
   return (
     <div className="space-y-8">
@@ -203,6 +232,14 @@ const DashboardMenu = () => {
         </div>
       </div>
 
+      {/* Offline Status Warning */}
+      {error && (
+        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
       {/* Main Grid: Item List */}
       <div className="bg-ebony-card border border-stone-border/40 p-8">
         <h2 className="font-serif text-lg font-bold text-white uppercase tracking-wider mb-6">
@@ -213,7 +250,7 @@ const DashboardMenu = () => {
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
           </div>
-        ) : items.length === 0 ? (
+        ) : !Array.isArray(menuItems) || menuItems.length === 0 ? (
           <div className="text-center py-12 text-stone font-light text-xs border border-dashed border-stone-border/20">
             No dishes found. Click 'Add Menu Item' to populate.
           </div>
@@ -231,14 +268,14 @@ const DashboardMenu = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-border/30">
-                {items.map((item) => (
+                {(Array.isArray(menuItems) ? menuItems : []).map((item) => (
                   <tr key={item.id} className="text-stone-light hover:bg-ebony-light/40 transition-colors">
                     <td className="py-4">
                       <p className="font-semibold text-white">{item.name}</p>
                       <p className="text-[10px] text-stone mt-0.5 max-w-sm truncate">{item.description}</p>
                     </td>
                     <td className="py-4 font-serif text-gold-hover">{item.category_name}</td>
-                    <td className="py-4 font-semibold text-white">₹{parseFloat(item.price).toFixed(2)}</td>
+                    <td className="py-4 font-semibold text-white">₹{item.price ? parseFloat(item.price).toFixed(2) : '0.00'}</td>
                     <td className="py-4">
                       <div className="flex space-x-1">
                         {item.is_vegetarian && (
@@ -309,7 +346,7 @@ const DashboardMenu = () => {
               onChange={(e) => setItemForm({ ...itemForm, category_id: e.target.value })}
               className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-stone-light focus:outline-none focus:border-gold rounded-none"
             >
-              {categories.map(c => (
+              {(Array.isArray(menuCategories) ? menuCategories : []).map(c => (
                 <option key={c.id} value={c.id}>{c.name}</option>
               ))}
             </select>
@@ -451,7 +488,7 @@ const DashboardMenu = () => {
             <input
               type="number"
               value={categoryForm.display_order}
-              onChange={(e) => setCategoryForm({ ...categoryForm, display_order: parseInt(e.target.value, 10) })}
+              onChange={(e) => setCategoryForm({ ...categoryForm, display_order: parseInt(e.target.value, 10) || 0 })}
               className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white focus:outline-none focus:border-gold"
             />
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
-import { BarChart3, TrendingUp, Clock, PieChart, Users } from 'lucide-react';
+import { BarChart3, TrendingUp, Clock, PieChart, Users, AlertCircle } from 'lucide-react';
 
 const MOCK_TRENDS = [
   { date: '2026-06-03', count: 5 },
@@ -34,22 +34,52 @@ const DashboardReports = () => {
   const [timeSlots, setTimeSlots] = useState(MOCK_TIME_SLOTS);
   const [menuSplit, setMenuSplit] = useState(MOCK_MENU_SPLIT);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchReports = async () => {
       try {
         setLoading(true);
+        setError(null);
         const [trendsRes, slotsRes, splitRes] = await Promise.all([
           api.get('/reports/trends'),
           api.get('/reports/time-slots'),
           api.get('/reports/menu-split')
         ]);
         
-        setTrends(trendsRes.data.length ? trendsRes.data : MOCK_TRENDS);
-        setTimeSlots(slotsRes.data.length ? slotsRes.data : MOCK_TIME_SLOTS);
-        setMenuSplit(splitRes.data.length ? splitRes.data : MOCK_MENU_SPLIT);
+        let trendsData = trendsRes?.data;
+        if (trendsData && typeof trendsData === 'object' && !Array.isArray(trendsData)) {
+          if (Array.isArray(trendsData.data)) trendsData = trendsData.data;
+          else trendsData = [];
+        }
+        if (!Array.isArray(trendsData)) {
+          trendsData = [];
+        }
+
+        let slotsData = slotsRes?.data;
+        if (slotsData && typeof slotsData === 'object' && !Array.isArray(slotsData)) {
+          if (Array.isArray(slotsData.data)) slotsData = slotsData.data;
+          else slotsData = [];
+        }
+        if (!Array.isArray(slotsData)) {
+          slotsData = [];
+        }
+
+        let splitData = splitRes?.data;
+        if (splitData && typeof splitData === 'object' && !Array.isArray(splitData)) {
+          if (Array.isArray(splitData.data)) splitData = splitData.data;
+          else splitData = [];
+        }
+        if (!Array.isArray(splitData)) {
+          splitData = [];
+        }
+
+        setTrends(trendsData.length ? trendsData : MOCK_TRENDS);
+        setTimeSlots(slotsData.length ? slotsData : MOCK_TIME_SLOTS);
+        setMenuSplit(splitData.length ? splitData : MOCK_MENU_SPLIT);
       } catch (err) {
-        console.warn('API error fetching reports. Rendering mock analytics.');
+        console.warn('API error fetching reports. Rendering mock analytics.', err);
+        setError('Offline mode: Displaying local demo analytics and trends.');
         setTrends(MOCK_TRENDS);
         setTimeSlots(MOCK_TIME_SLOTS);
         setMenuSplit(MOCK_MENU_SPLIT);
@@ -61,10 +91,14 @@ const DashboardReports = () => {
     fetchReports();
   }, []);
 
+  const safeTrends = Array.isArray(trends) ? trends : MOCK_TRENDS;
+  const safeTimeSlots = Array.isArray(timeSlots) ? timeSlots : MOCK_TIME_SLOTS;
+  const safeMenuSplit = Array.isArray(menuSplit) ? menuSplit : MOCK_MENU_SPLIT;
+
   // Calculate highest counts for chart scaling
-  const maxTrendCount = Math.max(...trends.map(t => t.count), 1);
-  const maxSlotCount = Math.max(...timeSlots.map(s => s.count), 1);
-  const maxMenuCount = Math.max(...menuSplit.map(m => m.count), 1);
+  const maxTrendCount = Math.max(...(safeTrends.map(t => t.count || 0)), 1);
+  const maxSlotCount = Math.max(...(safeTimeSlots.map(s => s.count || 0)), 1);
+  const maxMenuCount = Math.max(...(safeMenuSplit.map(m => m.count || 0)), 1);
 
   return (
     <div className="space-y-10">
@@ -78,6 +112,14 @@ const DashboardReports = () => {
           Detailed metrics of guest reservations, busy hour intervals, and menu category distributions.
         </p>
       </div>
+
+      {/* Offline Status Warning */}
+      {error && (
+        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
 
       {loading ? (
         <div className="flex justify-center py-20">
@@ -97,8 +139,8 @@ const DashboardReports = () => {
             
             {/* Custom Vertical Bar Chart */}
             <div className="h-64 flex items-end gap-3 px-2">
-              {trends.map((t, idx) => {
-                const percent = (t.count / maxTrendCount) * 100;
+              {safeTrends.map((t, idx) => {
+                const percent = ((t.count || 0) / maxTrendCount) * 100;
                 return (
                   <div key={idx} className="flex-1 flex flex-col items-center group">
                     <div className="w-full relative flex flex-col justify-end h-48 bg-ebony-light border border-stone-border/30">
@@ -115,7 +157,7 @@ const DashboardReports = () => {
                     </div>
                     {/* Date label */}
                     <span className="text-[9px] text-stone mt-2.5 truncate w-full text-center">
-                      {t.date.slice(5)}
+                      {t.date ? t.date.slice(5) : 'N/A'}
                     </span>
                   </div>
                 );
@@ -134,8 +176,8 @@ const DashboardReports = () => {
 
             {/* Horizontal progress indicators */}
             <div className="space-y-4">
-              {timeSlots.slice(0, 5).map((slot, idx) => {
-                const percent = (slot.count / maxSlotCount) * 100;
+              {safeTimeSlots.slice(0, 5).map((slot, idx) => {
+                const percent = ((slot.count || 0) / maxSlotCount) * 100;
                 return (
                   <div key={idx} className="space-y-1.5">
                     <div className="flex justify-between text-[11px]">
@@ -165,7 +207,7 @@ const DashboardReports = () => {
 
             {/* Matrix grid showing splits */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-              {menuSplit.map((item, idx) => (
+              {safeMenuSplit.map((item, idx) => (
                 <div key={idx} className="bg-ebony-light border border-stone-border p-5 text-center flex flex-col justify-between hover:border-gold/30 transition-colors">
                   <div>
                     <span className="text-[9px] tracking-wider uppercase text-stone block mb-1">
@@ -181,7 +223,7 @@ const DashboardReports = () => {
                   </div>
                   <div className="w-full h-1 bg-ebony border border-stone-border">
                     <div 
-                      style={{ width: `${(item.count / maxMenuCount) * 100}%` }}
+                      style={{ width: `${((item.count || 0) / maxMenuCount) * 100}%` }}
                       className="h-full bg-gold"
                     />
                   </div>

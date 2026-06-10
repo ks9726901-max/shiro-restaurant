@@ -3,15 +3,16 @@ import api from '../../utils/api';
 import { Search, Calendar, Filter, AlertCircle, Eye, EyeOff, Trash2 } from 'lucide-react';
 
 const FALLBACK_RESERVATIONS = [
-  { id: 1, customer_name: 'Ananya Sharma', customer_email: 'ananya@example.com', customer_phone: '+919876543210', reservation_date: '2026-06-10', reservation_time: '19:30:00', guest_count: 4, special_requests: 'Anniversary celebration. Window table near water channel if possible.', status: 'confirmed' },
-  { id: 2, customer_name: 'Vikram Malhotra', customer_email: 'vikram.m@example.com', customer_phone: '+919123456789', reservation_date: '2026-06-10', reservation_time: '21:00:00', guest_count: 2, special_requests: 'No seafood allergies, requesting Teppanyaki seating.', status: 'pending' },
-  { id: 3, customer_name: 'Rohan Sen', customer_email: 'rohan.sen@example.com', customer_phone: '+919988776655', reservation_date: '2026-06-11', reservation_time: '13:00:00', guest_count: 6, special_requests: 'Business lunch. Requires quiet area.', status: 'confirmed' },
-  { id: 4, customer_name: 'Priyanka Rao', customer_email: 'priyanka@example.com', customer_phone: '+919888877777', reservation_date: '2026-06-08', reservation_time: '20:00:00', guest_count: 3, special_requests: 'Birthday dinner, need candle on dessert.', status: 'confirmed' }
+  { id: 1, customer_name: 'Ananya Sharma (Demo)', customer_email: 'ananya@example.com', customer_phone: '+919876543210', reservation_date: '2026-06-10', reservation_time: '19:30:00', guest_count: 4, special_requests: 'Anniversary celebration. Window table near water channel if possible.', status: 'confirmed' },
+  { id: 2, customer_name: 'Vikram Malhotra (Demo)', customer_email: 'vikram.m@example.com', customer_phone: '+919123456789', reservation_date: '2026-06-10', reservation_time: '21:00:00', guest_count: 2, special_requests: 'No seafood allergies, requesting Teppanyaki seating.', status: 'pending' },
+  { id: 3, customer_name: 'Rohan Sen (Demo)', customer_email: 'rohan.sen@example.com', customer_phone: '+919988776655', reservation_date: '2026-06-11', reservation_time: '13:00:00', guest_count: 6, special_requests: 'Business lunch. Requires quiet area.', status: 'confirmed' },
+  { id: 4, customer_name: 'Priyanka Rao (Demo)', customer_email: 'priyanka@example.com', customer_phone: '+919888877777', reservation_date: '2026-06-08', reservation_time: '20:00:00', guest_count: 3, special_requests: 'Birthday dinner, need candle on dessert.', status: 'confirmed' }
 ];
 
 const DashboardReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
   // Filters
   const [search, setSearch] = useState('');
@@ -24,15 +25,27 @@ const DashboardReservations = () => {
   const fetchReservations = async () => {
     try {
       setLoading(true);
+      setError(null);
       let endpoint = '/reservations?';
       if (search) endpoint += `search=${search}&`;
       if (status) endpoint += `status=${status}&`;
       if (date) endpoint += `date=${date}&`;
       
       const response = await api.get(endpoint);
-      setReservations(response.data.length ? response.data : FALLBACK_RESERVATIONS);
+      
+      let data = response?.data;
+      if (data && typeof data === 'object' && !Array.isArray(data)) {
+        if (Array.isArray(data.data)) data = data.data;
+        else if (Array.isArray(data.reservations)) data = data.reservations;
+        else data = [];
+      }
+      if (!Array.isArray(data)) {
+        data = [];
+      }
+      setReservations(data.length ? data : FALLBACK_RESERVATIONS);
     } catch (err) {
-      console.warn('API error fetching reservations. Using mock fallbacks.');
+      console.warn('API error fetching reservations. Using mock fallbacks.', err);
+      setError('Offline mode: Using local demo reservations list.');
       setReservations(FALLBACK_RESERVATIONS);
     } finally {
       setLoading(false);
@@ -60,7 +73,7 @@ const DashboardReservations = () => {
       console.error('Failed to update status:', err);
       // Local fallback mock update
       setReservations(prev => 
-        prev.map(res => res.id === id ? { ...res, status: newStatus } : res)
+        (Array.isArray(prev) ? prev : []).map(res => res.id === id ? { ...res, status: newStatus } : res)
       );
     }
   };
@@ -74,7 +87,7 @@ const DashboardReservations = () => {
     } catch (err) {
       console.error('Failed to delete reservation:', err);
       // Local fallback mock update
-      setReservations(prev => prev.filter(res => res.id !== id));
+      setReservations(prev => (Array.isArray(prev) ? prev : []).filter(res => res.id !== id));
     }
   };
 
@@ -93,6 +106,14 @@ const DashboardReservations = () => {
           Review, approve, cancel, or search guest dining bookings.
         </p>
       </div>
+
+      {/* Offline Status Warning */}
+      {error && (
+        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
 
       {/* Filters Form */}
       <div className="bg-ebony-card border border-stone-border/40 p-6">
@@ -165,7 +186,7 @@ const DashboardReservations = () => {
           <div className="flex justify-center py-12">
             <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
           </div>
-        ) : reservations.length === 0 ? (
+        ) : !Array.isArray(reservations) || reservations.length === 0 ? (
           <div className="text-center py-12 text-stone font-light text-xs border border-dashed border-stone-border/20">
             No reservations match the search criteria.
           </div>
@@ -183,7 +204,7 @@ const DashboardReservations = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-border/30">
-                {reservations.map((res) => (
+                {(Array.isArray(reservations) ? reservations : []).map((res) => (
                   <React.Fragment key={res.id}>
                     <tr className={`text-stone-light hover:bg-ebony-light/40 transition-colors ${expandedRow === res.id ? 'bg-ebony-light/25' : ''}`}>
                       <td className="py-4">
@@ -201,7 +222,7 @@ const DashboardReservations = () => {
                       </td>
                       <td className="py-4 font-serif text-gold font-medium">
                         <p>{res.reservation_date}</p>
-                        <p className="text-[10px] text-stone-light mt-0.5">{res.reservation_time.slice(0, 5)}</p>
+                        <p className="text-[10px] text-stone-light mt-0.5">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</p>
                       </td>
                       <td className="py-4 font-semibold text-white">{res.guest_count} persons</td>
                       <td className="py-4">
