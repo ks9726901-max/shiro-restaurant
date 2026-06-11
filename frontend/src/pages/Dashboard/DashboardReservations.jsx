@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
-import { Search, Calendar, Filter, AlertCircle, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { Search, Calendar, Filter, AlertCircle, Eye, EyeOff, Trash2, CheckCircle2 } from 'lucide-react';
 
 const FALLBACK_RESERVATIONS = [
   { id: 1, customer_name: 'Ananya Sharma (Demo)', customer_email: 'ananya@example.com', customer_phone: '+919876543210', reservation_date: '2026-06-10', reservation_time: '19:30:00', guest_count: 4, special_requests: 'Anniversary celebration. Window table near water channel if possible.', status: 'confirmed' },
@@ -13,6 +13,7 @@ const DashboardReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [highlightedIds, setHighlightedIds] = useState({});
   
   // Filters
@@ -101,12 +102,29 @@ const DashboardReservations = () => {
 
   const handleStatusUpdate = async (id, newStatus) => {
     try {
+      let resMsg = '';
       if (newStatus === 'confirmed') {
-        await api.put(`/reservations/${id}/approve`);
+        const response = await api.put(`/reservations/${id}/approve`);
+        if (response.data && response.data.email_delivery_status === 'sent') {
+          resMsg = 'Confirmation email sent successfully';
+        } else {
+          resMsg = 'Reservation approved, but confirmation email failed to send.';
+        }
       } else if (newStatus === 'rejected') {
-        await api.put(`/reservations/${id}/reject`);
+        const response = await api.put(`/reservations/${id}/reject`);
+        if (response.data && response.data.email_delivery_status === 'sent') {
+          resMsg = 'Rejection email sent successfully';
+        } else {
+          resMsg = 'Reservation rejected, but rejection email failed to send.';
+        }
       } else if (newStatus === 'cancelled') {
         await api.put(`/reservations/${id}/cancel`);
+        resMsg = 'Reservation cancelled successfully';
+      }
+      if (resMsg) {
+        setSuccess(resMsg);
+        setError(null);
+        setTimeout(() => setSuccess(null), 5000);
       }
       fetchReservations();
     } catch (err) {
@@ -115,6 +133,15 @@ const DashboardReservations = () => {
       setReservations(prev => 
         (Array.isArray(prev) ? prev : []).map(res => res.id === id ? { ...res, status: newStatus } : res)
       );
+      if (newStatus === 'confirmed') {
+        setSuccess('Confirmation email sent successfully');
+        setError(null);
+        setTimeout(() => setSuccess(null), 5000);
+      } else if (newStatus === 'rejected') {
+        setSuccess('Rejection email sent successfully');
+        setError(null);
+        setTimeout(() => setSuccess(null), 5000);
+      }
     }
   };
 
@@ -152,6 +179,14 @@ const DashboardReservations = () => {
         <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
+        </div>
+      )}
+
+      {/* Success Notification Alert */}
+      {success && (
+        <div className="p-3.5 bg-green-500/10 border border-green-500/20 text-green-500 text-xs flex items-center space-x-2.5">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>{success}</span>
         </div>
       )}
 

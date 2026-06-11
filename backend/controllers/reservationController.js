@@ -171,8 +171,9 @@ exports.approveReservation = async (req, res) => {
     let emailStatus = 'sent';
     try {
       await emailService.sendConfirmationEmail(resv);
+      console.log(`✅ [Email Success] Confirmation email sent successfully to ${resv.customer_email} for reservation ID ${id} (Mock Mode)`);
     } catch (err) {
-      console.error('Approve email fail (Mock Mode):', err.message);
+      console.error(`❌ [Email Failure] Confirmation email failed to send to ${resv.customer_email} for reservation ID ${id} (Mock Mode):`, err.message);
       emailStatus = 'failed';
     }
     resv.email_delivery_status = emailStatus;
@@ -197,8 +198,9 @@ exports.approveReservation = async (req, res) => {
     let emailStatus = 'sent';
     try {
       await emailService.sendConfirmationEmail(resv);
+      console.log(`✅ [Email Success] Confirmation email sent successfully to ${resv.customer_email} for reservation ID ${id}`);
     } catch (err) {
-      console.error('Approve email fail:', err.message);
+      console.error(`❌ [Email Failure] Confirmation email failed to send to ${resv.customer_email} for reservation ID ${id}:`, err.message);
       emailStatus = 'failed';
     }
 
@@ -232,8 +234,9 @@ exports.rejectReservation = async (req, res) => {
     let emailStatus = 'sent';
     try {
       await emailService.sendRejectionEmail(resv);
+      console.log(`✅ [Email Success] Rejection email sent successfully to ${resv.customer_email} for reservation ID ${id} (Mock Mode)`);
     } catch (err) {
-      console.error('Reject email fail (Mock Mode):', err.message);
+      console.error(`❌ [Email Failure] Rejection email failed to send to ${resv.customer_email} for reservation ID ${id} (Mock Mode):`, err.message);
       emailStatus = 'failed';
     }
     resv.email_delivery_status = emailStatus;
@@ -258,8 +261,9 @@ exports.rejectReservation = async (req, res) => {
     let emailStatus = 'sent';
     try {
       await emailService.sendRejectionEmail(resv);
+      console.log(`✅ [Email Success] Rejection email sent successfully to ${resv.customer_email} for reservation ID ${id}`);
     } catch (err) {
-      console.error('Reject email fail:', err.message);
+      console.error(`❌ [Email Failure] Rejection email failed to send to ${resv.customer_email} for reservation ID ${id}:`, err.message);
       emailStatus = 'failed';
     }
 
