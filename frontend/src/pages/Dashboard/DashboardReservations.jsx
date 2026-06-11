@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from '../../utils/api';
 import { Search, Calendar, Filter, AlertCircle, Eye, EyeOff, Trash2, CheckCircle2 } from 'lucide-react';
 
@@ -73,9 +73,17 @@ const DashboardReservations = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Fix React stale closure bug for auto-refreshing notifications
+  const fetchReservationsRef = useRef(fetchReservations);
+  useEffect(() => {
+    fetchReservationsRef.current = fetchReservations;
+  }, [fetchReservations]);
+
   useEffect(() => {
     fetchReservations();
+  }, [status, date]); // Trigger fetch automatically on date/status filter change
 
+  useEffect(() => {
     const handleNewReservation = (e) => {
       const newRes = e.detail;
       if (newRes && newRes.id) {
@@ -85,7 +93,7 @@ const DashboardReservations = () => {
         }));
         
         // Refresh reservations list
-        fetchReservations();
+        fetchReservationsRef.current();
       }
     };
 
@@ -93,7 +101,7 @@ const DashboardReservations = () => {
     return () => {
       window.removeEventListener('newReservationReceived', handleNewReservation);
     };
-  }, [status, date]); // Trigger fetch automatically on date/status filter change
+  }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
