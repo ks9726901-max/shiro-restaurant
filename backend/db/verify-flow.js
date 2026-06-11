@@ -1,10 +1,10 @@
 // Complete Flow Verification Script (Customer -> API -> Staff Approval)
-// Runs against http://localhost:5000
+// Runs against https://shiro-restaurant.onrender.com
 
 async function verify() {
   console.log('🚀 Starting Full-Stack Integration Verification...\n');
 
-  const baseURL = 'http://localhost:5000/api';
+  const baseURL = 'https://shiro-restaurant.onrender.com/api';
   
   // 1. Create a customer reservation (POST /api/reservations)
   console.log('Step 1: Customer submitting reservation...');

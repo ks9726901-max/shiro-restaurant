@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://shiro-backend-api.onrender.com/api/:path*"
+      "destination": "https://shiro-restaurant.onrender.com/api/:path*"
     },
     {
       "source": "/:path*",

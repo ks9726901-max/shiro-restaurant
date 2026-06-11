@@ -1,2 +1,2 @@
-/api/* https://shiro-backend-api.onrender.com/api/:splat 200
+/api/* https://shiro-restaurant.onrender.com/api/:splat 200
 /* /index.html 200
