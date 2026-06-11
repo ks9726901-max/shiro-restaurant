@@ -17,7 +17,7 @@ async function initializeDatabase(pool) {
         try {
           await pool.query(`
             ALTER TABLE reservations 
-              MODIFY COLUMN status ENUM('pending', 'confirmed', 'cancelled', 'rejected') DEFAULT 'pending',
+              MODIFY COLUMN status ENUM('pending', 'confirmed', 'cancelled', 'rejected', 'completed') DEFAULT 'pending',
               ADD COLUMN email_delivery_status VARCHAR(50) DEFAULT NULL
           `);
           console.log('✅ Migration executed successfully.');
@@ -27,6 +27,22 @@ async function initializeDatabase(pool) {
       } else {
         console.log('✅ Database is up to date.');
       }
+
+      // Check if status enum includes 'completed'
+      try {
+        const [statusColumn] = await pool.query("SHOW COLUMNS FROM reservations LIKE 'status'");
+        if (statusColumn.length > 0 && !statusColumn[0].Type.includes('completed')) {
+          console.log('⏳ Running migration: Updating status enum to include completed...');
+          await pool.query(`
+            ALTER TABLE reservations 
+              MODIFY COLUMN status ENUM('pending', 'confirmed', 'cancelled', 'rejected', 'completed') DEFAULT 'pending'
+          `);
+          console.log('✅ Migration: status enum updated successfully.');
+        }
+      } catch (migrationErr) {
+        console.error('❌ Migration for status enum failed:', migrationErr.message);
+      }
+
       return;
     }
 
@@ -80,7 +96,7 @@ async function initializeDatabase(pool) {
         reservation_time TIME NOT NULL,
         guest_count INT NOT NULL,
         special_requests TEXT,
-        status ENUM('pending', 'confirmed', 'cancelled', 'rejected') DEFAULT 'pending',
+        status ENUM('pending', 'confirmed', 'cancelled', 'rejected', 'completed') DEFAULT 'pending',
         email_delivery_status VARCHAR(50) DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )

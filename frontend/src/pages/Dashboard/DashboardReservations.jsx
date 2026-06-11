@@ -157,6 +157,10 @@ const DashboardReservations = () => {
         setSuccess('Rejection email sent successfully');
         setError(null);
         setTimeout(() => setSuccess(null), 5000);
+      } else if (newStatus === 'completed') {
+        setSuccess('Reservation marked as completed');
+        setError(null);
+        setTimeout(() => setSuccess(null), 5000);
       }
     }
   };
@@ -242,6 +246,8 @@ const DashboardReservations = () => {
               <option value="">All Statuses</option>
               <option value="pending">Pending</option>
               <option value="confirmed">Confirmed</option>
+              <option value="rejected">Rejected</option>
+              <option value="completed">Completed</option>
               <option value="cancelled">Cancelled</option>
             </select>
           </div>
@@ -329,9 +335,11 @@ const DashboardReservations = () => {
                             ? 'bg-green-950 text-green-400 border border-green-500/20' 
                             : res.status === 'rejected'
                             ? 'bg-red-950 text-red-400 border border-red-500/20'
+                            : res.status === 'completed'
+                            ? 'bg-blue-950 text-blue-400 border border-blue-500/20'
                             : res.status === 'cancelled'
                             ? 'bg-stone-900 text-stone-400 border border-stone-500/20'
-                            : 'bg-amber-950 text-amber-400 border border-amber-500/20'
+                            : 'bg-yellow-950 text-yellow-400 border border-yellow-500/20'
                         }`}>
                           {res.status}
                         </span>
@@ -361,6 +369,13 @@ const DashboardReservations = () => {
                                 Reject
                               </button>
                             </>
+                          ) : res.status === 'confirmed' ? (
+                            <button
+                              onClick={() => handleStatusUpdate(res.id, 'completed')}
+                              className="px-2.5 py-1 border border-blue-500/40 text-blue-400 hover:bg-blue-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer mr-2"
+                            >
+                              Complete
+                            </button>
                           ) : (
                             <span className="text-stone text-[10px] uppercase italic mr-2">Processed</span>
                           )}

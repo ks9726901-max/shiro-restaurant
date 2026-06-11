@@ -161,15 +161,26 @@ const DashboardHome = () => {
           setError(null);
           setTimeout(() => setSuccess(null), 5000);
         }
+      } else if (newStatus === 'completed') {
+        setSummary(prev => ({
+          ...prev,
+          confirmedReservations: Math.max((prev.confirmedReservations || 0) - 1, 0)
+        }));
+        setSuccess('Reservation marked as completed');
+        setError(null);
+        setTimeout(() => setSuccess(null), 5000);
       }
     }
   };
 
+  const todayReservationsCount = todayBookings.length;
+  const totalGuestsToday = todayBookings.reduce((sum, res) => sum + parseInt(res.guest_count || 0, 10), 0);
+
   const statCards = [
-    { label: 'Pending Approval', count: summary.pendingReservations, icon: Clock, color: 'text-amber-500 border-amber-500/25 bg-amber-500/5' },
-    { label: 'Confirmed Bookings', count: summary.confirmedReservations, icon: CheckCircle2, color: 'text-green-500 border-green-500/25 bg-green-500/5' },
-    { label: 'Total Reservations', count: summary.totalReservations, icon: CalendarRange, color: 'text-gold border-gold/25 bg-gold/5' },
-    { label: 'Dishes in Menu', count: summary.totalMenuItems, icon: Utensils, color: 'text-jade-light border-jade-light/25 bg-jade-light/5' }
+    { label: "Today's Reservations", count: todayReservationsCount, icon: CalendarDays, color: 'text-gold border-gold/25 bg-gold/5' },
+    { label: 'Pending Reservations', count: summary.pendingReservations, icon: Clock, color: 'text-amber-500 border-amber-500/25 bg-amber-500/5' },
+    { label: 'Confirmed Reservations', count: summary.confirmedReservations, icon: CheckCircle2, color: 'text-green-500 border-green-500/25 bg-green-500/5' },
+    { label: 'Total Guests Today', count: totalGuestsToday, icon: Utensils, color: 'text-jade-light border-jade-light/25 bg-jade-light/5' }
   ];
 
   return (
@@ -274,9 +285,11 @@ const DashboardHome = () => {
                           ? 'bg-green-950 text-green-400 border border-green-500/20' 
                           : res.status === 'rejected'
                           ? 'bg-red-950 text-red-400 border border-red-500/20'
+                          : res.status === 'completed'
+                          ? 'bg-blue-950 text-blue-400 border border-blue-500/20'
                           : res.status === 'cancelled'
                           ? 'bg-stone-900 text-stone-400 border border-stone-500/20'
-                          : 'bg-amber-950 text-amber-400 border border-amber-500/20'
+                          : 'bg-yellow-950 text-yellow-400 border border-yellow-500/20'
                       }`}>
                         {res.status}
                       </span>
@@ -297,6 +310,13 @@ const DashboardHome = () => {
                             Reject
                           </button>
                         </div>
+                      ) : res.status === 'confirmed' ? (
+                        <button
+                          onClick={() => handleStatusChange(res.id, 'completed')}
+                          className="px-3 py-1 border border-blue-500/40 text-blue-400 hover:bg-blue-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
+                        >
+                          Complete
+                        </button>
                       ) : (
                         <span className="text-stone text-[10px] uppercase italic">Processed</span>
                       )}

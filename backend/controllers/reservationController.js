@@ -341,3 +341,35 @@ exports.deleteReservation = async (req, res) => {
     res.status(500).json({ message: 'Error deleting reservation', error: error.message });
   }
 };
+
+// @desc    Complete reservation
+// @route   PUT /api/reservations/:id/complete
+// @access  Private (Staff/Admin)
+exports.completeReservation = async (req, res) => {
+  const { id } = req.params;
+
+  // MOCK MODE FALLBACK
+  if (global.db_offline) {
+    const resv = mockDb.reservations.find(r => r.id === parseInt(id));
+    if (!resv) {
+      return res.status(404).json({ message: 'Reservation not found' });
+    }
+    resv.status = 'completed';
+    return res.json({ message: 'Reservation completed successfully (Mock Mode)', status: 'completed' });
+  }
+
+  // REAL MYSQL IMPLEMENTATION
+  try {
+    const [exists] = await db.query('SELECT * FROM reservations WHERE id = ?', [id]);
+    if (exists.length === 0) {
+      return res.status(404).json({ message: 'Reservation not found' });
+    }
+
+    await db.query('UPDATE reservations SET status = "completed" WHERE id = ?', [id]);
+    res.json({ message: 'Reservation completed successfully', status: 'completed' });
+  } catch (error) {
+    console.error('Complete reservation error:', error);
+    res.status(500).json({ message: 'Error completing reservation', error: error.message });
+  }
+};
+
