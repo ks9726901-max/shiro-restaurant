@@ -242,7 +242,7 @@ async function setup() {
     // 6. Seed Users
     console.log('Seeding users...');
     const adminPasswordHash = await bcrypt.hash('admin123', 10);
-    const staffPasswordHash = await bcrypt.hash('staff123', 10);
+    const staffPasswordHash = await bcrypt.hash('kishanis9740', 10);
 
     await connection.query(
       'INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
