@@ -310,7 +310,7 @@ const DashboardReservations = () => {
                     <React.Fragment key={res.id}>
                       <tr className={`text-stone-light hover:bg-ebony-light/40 transition-colors ${
                         expandedRow === res.id ? 'bg-ebony-light/25' : ''
-                      } ${isHighlighted ? 'animate-reservation-highlight' : ''}`}>
+                      } ${isHighlighted ? 'animate-reservation-highlight-green' : ''}`}>
                       <td className="py-4">
                         <button 
                           onClick={() => toggleExpandRow(res.id)}

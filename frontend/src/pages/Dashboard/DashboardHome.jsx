@@ -272,7 +272,7 @@ const DashboardHome = () => {
                     <tr 
                       key={res.id} 
                       className={`text-stone-light hover:bg-ebony-light/50 transition-colors ${
-                        isHighlighted ? 'animate-reservation-highlight' : ''
+                        isHighlighted ? 'animate-reservation-highlight-green' : ''
                       }`}
                     >
                       <td className="py-4 font-semibold text-white">{res.customer_name}</td>
