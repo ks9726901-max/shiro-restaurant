@@ -1,6 +1,6 @@
 const db = require('../config/db');
 const mockDb = require('../config/mockDb');
-const emailService = require('../utils/emailService');
+const emailService = require('../services/emailService');
 
 // @desc    Create a new reservation
 // @route   POST /api/reservations

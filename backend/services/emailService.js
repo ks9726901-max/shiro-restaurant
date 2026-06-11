@@ -7,7 +7,7 @@ let resend = null;
 
 if (isResendConfigured) {
   resend = new Resend(process.env.RESEND_API_KEY);
-  console.log('✅ Resend Email Integration initialized.');
+  console.log('✅ Resend Email Service initialized in services layer.');
 } else {
   console.warn('⚠️ RESEND_API_KEY is not configured. Email service will run in MOCK log mode.');
 }
@@ -48,7 +48,7 @@ Thank you.`,
     }
   } else {
     console.log('\n==================================================');
-    console.log('✉️ [MOCK EMAIL SENT VIA RESEND]');
+    console.log('✉️ [MOCK EMAIL SENT VIA RESEND SERVICES LAYER]');
     console.log(`To: ${mailOptions.to}`);
     console.log(`Subject: ${mailOptions.subject}`);
     console.log('Body:');
@@ -90,7 +90,7 @@ Thank you.`,
     }
   } else {
     console.log('\n==================================================');
-    console.log('✉️ [MOCK EMAIL SENT VIA RESEND]');
+    console.log('✉️ [MOCK EMAIL SENT VIA RESEND SERVICES LAYER]');
     console.log(`To: ${mailOptions.to}`);
     console.log(`Subject: ${mailOptions.subject}`);
     console.log('Body:');
@@ -128,7 +128,7 @@ exports.sendTestEmail = async (to, subject, text) => {
     }
   } else {
     console.log('\n==================================================');
-    console.log('✉️ [MOCK TEST EMAIL SENT VIA RESEND]');
+    console.log('✉️ [MOCK TEST EMAIL SENT VIA RESEND SERVICES LAYER]');
     console.log(`To: ${mailOptions.to}`);
     console.log(`Subject: ${mailOptions.subject}`);
     console.log('Body:');

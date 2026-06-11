@@ -9,7 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const menuRoutes = require('./routes/menuRoutes');
 const reservationRoutes = require('./routes/reservationRoutes');
 const reportRoutes = require('./routes/reportRoutes');
-const emailService = require('./utils/emailService');
+const emailService = require('./services/emailService');
 
 const app = express();
 const server = http.createServer(app);
@@ -47,12 +47,12 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/reservations', reservationRoutes);
 app.use('/api/reports', reportRoutes);
 
-// Test Email Route (GET/POST)
-app.all('/api/test-email', async (req, res) => {
-  const { to, subject, text } = req.method === 'GET' ? req.query : req.body;
+// Test Email Route (GET)
+app.get('/api/test-email', async (req, res) => {
+  const { to, subject, text } = req.query;
 
   if (!to) {
-    return res.status(400).json({ message: 'Recipient "to" email address is required' });
+    return res.status(400).json({ success: false, message: 'Recipient "to" query parameter is required' });
   }
 
   const emailSubject = subject || 'Resend Integration Test - Shiro Bengaluru';
@@ -61,11 +61,13 @@ app.all('/api/test-email', async (req, res) => {
   try {
     const data = await emailService.sendTestEmail(to, emailSubject, emailText);
     res.json({
-      message: 'Test email successfully triggered',
+      success: true,
+      message: 'Test email sent successfully',
       data
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
       message: 'Test email failed to send',
       error: error.message
     });
