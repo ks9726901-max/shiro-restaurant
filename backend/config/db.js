@@ -21,8 +21,14 @@ try {
   
   // Test connection immediately
   pool.query('SELECT 1')
-    .then(() => {
+    .then(async () => {
       console.log('✅ Connected to MySQL Database successfully.');
+      try {
+        const initializeDatabase = require('./dbInit');
+        await initializeDatabase(pool);
+      } catch (initErr) {
+        console.error('Failed to run database auto-initialization:', initErr);
+      }
     })
     .catch((err) => {
       console.warn('⚠️ MySQL connection failed. Running backend in in-memory MOCK mode.');
