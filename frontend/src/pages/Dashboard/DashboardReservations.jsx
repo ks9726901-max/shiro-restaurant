@@ -103,6 +103,8 @@ const DashboardReservations = () => {
     try {
       if (newStatus === 'confirmed') {
         await api.put(`/reservations/${id}/approve`);
+      } else if (newStatus === 'rejected') {
+        await api.put(`/reservations/${id}/reject`);
       } else if (newStatus === 'cancelled') {
         await api.put(`/reservations/${id}/cancel`);
       }
@@ -274,34 +276,46 @@ const DashboardReservations = () => {
                         <span className={`px-2 py-0.5 font-bold uppercase text-[9px] tracking-widest ${
                           res.status === 'confirmed' 
                             ? 'bg-green-950 text-green-400 border border-green-500/20' 
-                            : res.status === 'cancelled'
+                            : res.status === 'rejected'
                             ? 'bg-red-950 text-red-400 border border-red-500/20'
+                            : res.status === 'cancelled'
+                            ? 'bg-stone-900 text-stone-400 border border-stone-500/20'
                             : 'bg-amber-950 text-amber-400 border border-amber-500/20'
                         }`}>
                           {res.status}
                         </span>
+                        {res.email_delivery_status && (
+                          <div className="mt-1.5 flex items-center space-x-1 text-[9px] tracking-wider text-stone font-mono">
+                            <span className={`inline-block w-1.5 h-1.5 rounded-full ${
+                              res.email_delivery_status === 'sent' ? 'bg-green-400 animate-pulse' : 'bg-red-500'
+                            }`} />
+                            <span className="uppercase">{res.email_delivery_status === 'sent' ? 'sent' : 'failed'}</span>
+                          </div>
+                        )}
                       </td>
                       <td className="py-4 text-right">
                         <div className="flex justify-end items-center space-x-2">
-                          {res.status !== 'confirmed' && (
-                            <button
-                              onClick={() => handleStatusUpdate(res.id, 'confirmed')}
-                              className="px-2.5 py-1 border border-green-500/40 text-green-400 hover:bg-green-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider"
-                            >
-                              Confirm
-                            </button>
-                          )}
-                          {res.status !== 'cancelled' && (
-                            <button
-                              onClick={() => handleStatusUpdate(res.id, 'cancelled')}
-                              className="px-2.5 py-1 border border-amber-500/40 text-amber-400 hover:bg-amber-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider"
-                            >
-                              Cancel
-                            </button>
+                          {res.status === 'pending' ? (
+                            <>
+                              <button
+                                onClick={() => handleStatusUpdate(res.id, 'confirmed')}
+                                className="px-2.5 py-1 border border-green-500/40 text-green-400 hover:bg-green-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
+                              >
+                                Approve
+                              </button>
+                              <button
+                                onClick={() => handleStatusUpdate(res.id, 'rejected')}
+                                className="px-2.5 py-1 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
+                              >
+                                Reject
+                              </button>
+                            </>
+                          ) : (
+                            <span className="text-stone text-[10px] uppercase italic mr-2">Processed</span>
                           )}
                           <button
                             onClick={() => handleDelete(res.id)}
-                            className="p-1 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-colors"
+                            className="p-1 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-colors cursor-pointer"
                             title="Delete booking"
                           >
                             <Trash2 className="w-3.5 h-3.5" />

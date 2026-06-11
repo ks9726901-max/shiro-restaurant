@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const mockDb = require('../config/mockDb');
+const emailService = require('../utils/emailService');
 
 // @desc    Create a new reservation
 // @route   POST /api/reservations
@@ -166,7 +167,21 @@ exports.approveReservation = async (req, res) => {
       return res.status(404).json({ message: 'Reservation not found' });
     }
     resv.status = 'confirmed';
-    return res.json({ message: 'Reservation approved successfully (Mock Mode)', status: 'confirmed' });
+
+    let emailStatus = 'sent';
+    try {
+      await emailService.sendConfirmationEmail(resv);
+    } catch (err) {
+      console.error('Approve email fail (Mock Mode):', err.message);
+      emailStatus = 'failed';
+    }
+    resv.email_delivery_status = emailStatus;
+
+    return res.json({ 
+      message: 'Reservation approved successfully (Mock Mode)', 
+      status: 'confirmed', 
+      email_delivery_status: emailStatus 
+    });
   }
 
   // REAL MYSQL IMPLEMENTATION
@@ -175,12 +190,89 @@ exports.approveReservation = async (req, res) => {
     if (exists.length === 0) {
       return res.status(404).json({ message: 'Reservation not found' });
     }
+    const resv = exists[0];
 
     await db.query('UPDATE reservations SET status = "confirmed" WHERE id = ?', [id]);
-    res.json({ message: 'Reservation approved successfully', status: 'confirmed' });
+
+    let emailStatus = 'sent';
+    try {
+      await emailService.sendConfirmationEmail(resv);
+    } catch (err) {
+      console.error('Approve email fail:', err.message);
+      emailStatus = 'failed';
+    }
+
+    await db.query('UPDATE reservations SET email_delivery_status = ? WHERE id = ?', [emailStatus, id]);
+
+    res.json({ 
+      message: 'Reservation approved successfully', 
+      status: 'confirmed', 
+      email_delivery_status: emailStatus 
+    });
   } catch (error) {
     console.error('Approve reservation error:', error);
     res.status(500).json({ message: 'Error approving reservation', error: error.message });
+  }
+};
+
+// @desc    Reject reservation
+// @route   PUT /api/reservations/:id/reject
+// @access  Private (Staff/Admin)
+exports.rejectReservation = async (req, res) => {
+  const { id } = req.params;
+
+  // MOCK MODE FALLBACK
+  if (global.db_offline) {
+    const resv = mockDb.reservations.find(r => r.id === parseInt(id));
+    if (!resv) {
+      return res.status(404).json({ message: 'Reservation not found' });
+    }
+    resv.status = 'rejected';
+
+    let emailStatus = 'sent';
+    try {
+      await emailService.sendRejectionEmail(resv);
+    } catch (err) {
+      console.error('Reject email fail (Mock Mode):', err.message);
+      emailStatus = 'failed';
+    }
+    resv.email_delivery_status = emailStatus;
+
+    return res.json({ 
+      message: 'Reservation rejected successfully (Mock Mode)', 
+      status: 'rejected', 
+      email_delivery_status: emailStatus 
+    });
+  }
+
+  // REAL MYSQL IMPLEMENTATION
+  try {
+    const [exists] = await db.query('SELECT * FROM reservations WHERE id = ?', [id]);
+    if (exists.length === 0) {
+      return res.status(404).json({ message: 'Reservation not found' });
+    }
+    const resv = exists[0];
+
+    await db.query('UPDATE reservations SET status = "rejected" WHERE id = ?', [id]);
+
+    let emailStatus = 'sent';
+    try {
+      await emailService.sendRejectionEmail(resv);
+    } catch (err) {
+      console.error('Reject email fail:', err.message);
+      emailStatus = 'failed';
+    }
+
+    await db.query('UPDATE reservations SET email_delivery_status = ? WHERE id = ?', [emailStatus, id]);
+
+    res.json({ 
+      message: 'Reservation rejected successfully', 
+      status: 'rejected', 
+      email_delivery_status: emailStatus 
+    });
+  } catch (error) {
+    console.error('Reject reservation error:', error);
+    res.status(500).json({ message: 'Error rejecting reservation', error: error.message });
   }
 };
 

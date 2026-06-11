@@ -104,6 +104,8 @@ const DashboardHome = () => {
     try {
       if (newStatus === 'confirmed') {
         await api.put(`/reservations/${id}/approve`);
+      } else if (newStatus === 'rejected') {
+        await api.put(`/reservations/${id}/reject`);
       } else if (newStatus === 'cancelled') {
         await api.put(`/reservations/${id}/cancel`);
       }
@@ -120,7 +122,7 @@ const DashboardHome = () => {
           confirmedReservations: (prev.confirmedReservations || 0) + 1,
           pendingReservations: (prev.pendingReservations || 0) - 1
         }));
-      } else if (newStatus === 'cancelled') {
+      } else if (newStatus === 'rejected' || newStatus === 'cancelled') {
         setSummary(prev => ({
           ...prev,
           pendingReservations: (prev.pendingReservations || 0) - 1
@@ -228,8 +230,10 @@ const DashboardHome = () => {
                       <span className={`px-2 py-0.5 font-bold uppercase text-[9px] tracking-widest ${
                         res.status === 'confirmed' 
                           ? 'bg-green-950 text-green-400 border border-green-500/20' 
-                          : res.status === 'cancelled'
+                          : res.status === 'rejected'
                           ? 'bg-red-950 text-red-400 border border-red-500/20'
+                          : res.status === 'cancelled'
+                          ? 'bg-stone-900 text-stone-400 border border-stone-500/20'
                           : 'bg-amber-950 text-amber-400 border border-amber-500/20'
                       }`}>
                         {res.status}
@@ -240,15 +244,15 @@ const DashboardHome = () => {
                         <div className="flex justify-end space-x-2">
                           <button
                             onClick={() => handleStatusChange(res.id, 'confirmed')}
-                            className="px-3 py-1 border border-green-500/40 text-green-400 hover:bg-green-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider"
+                            className="px-3 py-1 border border-green-500/40 text-green-400 hover:bg-green-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
                           >
                             Approve
                           </button>
                           <button
-                            onClick={() => handleStatusChange(res.id, 'cancelled')}
-                            className="px-3 py-1 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider"
+                            onClick={() => handleStatusChange(res.id, 'rejected')}
+                            className="px-3 py-1 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
                           >
-                            Cancel
+                            Reject
                           </button>
                         </div>
                       ) : (

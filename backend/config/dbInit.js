@@ -8,7 +8,25 @@ async function initializeDatabase(pool) {
     const [tables] = await pool.query("SHOW TABLES LIKE 'users'");
     
     if (tables.length > 0) {
-      console.log('✅ Database tables already exist. Skipping initialization.');
+      console.log('✅ Database tables already exist. Checking migrations...');
+      
+      // Check if email_delivery_status column exists
+      const [columns] = await pool.query("SHOW COLUMNS FROM reservations LIKE 'email_delivery_status'");
+      if (columns.length === 0) {
+        console.log('⏳ Running migration: Adding email_delivery_status and updating status enum...');
+        try {
+          await pool.query(`
+            ALTER TABLE reservations 
+              MODIFY COLUMN status ENUM('pending', 'confirmed', 'cancelled', 'rejected') DEFAULT 'pending',
+              ADD COLUMN email_delivery_status VARCHAR(50) DEFAULT NULL
+          `);
+          console.log('✅ Migration executed successfully.');
+        } catch (migrationErr) {
+          console.error('❌ Migration failed:', migrationErr.message);
+        }
+      } else {
+        console.log('✅ Database is up to date.');
+      }
       return;
     }
 
@@ -62,7 +80,8 @@ async function initializeDatabase(pool) {
         reservation_time TIME NOT NULL,
         guest_count INT NOT NULL,
         special_requests TEXT,
-        status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+        status ENUM('pending', 'confirmed', 'cancelled', 'rejected') DEFAULT 'pending',
+        email_delivery_status VARCHAR(50) DEFAULT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
