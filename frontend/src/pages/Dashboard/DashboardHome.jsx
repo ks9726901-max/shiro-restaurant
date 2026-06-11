@@ -101,6 +101,14 @@ const DashboardHome = () => {
     };
   }, []);
 
+  // Auto-refresh dashboard data every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchDashboardData();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleStatusChange = async (id, newStatus) => {
     try {
       let resMsg = '';

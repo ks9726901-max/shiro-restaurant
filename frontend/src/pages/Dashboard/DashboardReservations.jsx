@@ -103,6 +103,14 @@ const DashboardReservations = () => {
     };
   }, []);
 
+  // Auto-refresh reservation list every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchReservationsRef.current();
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     fetchReservations();
