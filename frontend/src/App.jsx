@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
+import { NotificationProvider } from './context/NotificationContext';
 
 // Pages
 import Home from './pages/Home';
@@ -45,12 +46,14 @@ const CustomerLayout = () => {
 // Dashboard Layout Shell
 const DashboardLayout = () => {
   return (
-    <div className="flex bg-ebony min-h-screen text-stone">
-      <Sidebar />
-      <main className="flex-1 p-10 overflow-y-auto max-h-screen scrollbar-luxury">
-        <Outlet />
-      </main>
-    </div>
+    <NotificationProvider>
+      <div className="flex bg-ebony min-h-screen text-stone">
+        <Sidebar />
+        <main className="flex-1 p-10 overflow-y-auto max-h-screen scrollbar-luxury">
+          <Outlet />
+        </main>
+      </div>
+    </NotificationProvider>
   );
 };
 

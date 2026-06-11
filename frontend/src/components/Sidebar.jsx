@@ -1,5 +1,6 @@
-import React from 'react';
-import { NavLink, Link, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
+import { useNotifications } from '../context/NotificationContext';
 import { 
   CalendarRange, 
   Utensils, 
@@ -11,7 +12,15 @@ import {
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { unreadCount, clearUnreadCount } = useNotifications();
   const user = JSON.parse(localStorage.getItem('shiro_user') || '{}');
+
+  useEffect(() => {
+    if (location.pathname === '/dashboard/reservations') {
+      clearUnreadCount();
+    }
+  }, [location.pathname, clearUnreadCount]);
 
   const handleLogout = () => {
     localStorage.removeItem('shiro_token');
@@ -68,6 +77,11 @@ const Sidebar = () => {
           >
             <item.icon className="w-4 h-4 shrink-0" />
             <span>{item.name}</span>
+            {item.name === 'Reservations' && unreadCount > 0 && (
+              <span className="ml-auto bg-gold text-ebony font-sans font-bold text-[10px] px-2 py-0.5 rounded-full animate-bounce">
+                {unreadCount}
+              </span>
+            )}
           </NavLink>
         ))}
       </nav>

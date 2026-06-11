@@ -1,8 +1,15 @@
 import axios from 'axios';
 
+// Determine API Host dynamically
+export const API_HOST = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace(/\/api$/, '') 
+  : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+      ? 'http://localhost:5000' 
+      : 'https://shiro-restaurant.onrender.com');
+
 // Create axios instance
 const api = axios.create({
-  baseURL: 'https://shiro-restaurant.onrender.com/api',
+  baseURL: `${API_HOST}/api`,
   headers: {
     'Content-Type': 'application/json',
   },

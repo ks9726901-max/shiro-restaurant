@@ -13,6 +13,7 @@ const DashboardReservations = () => {
   const [reservations, setReservations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [highlightedIds, setHighlightedIds] = useState({});
   
   // Filters
   const [search, setSearch] = useState('');
@@ -52,8 +53,45 @@ const DashboardReservations = () => {
     }
   };
 
+  // Cleanup expired highlight states periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHighlightedIds(prev => {
+        const now = Date.now();
+        let updated = { ...prev };
+        let changed = false;
+        for (const [id, timestamp] of Object.entries(prev)) {
+          if (now - timestamp >= 30000) {
+            delete updated[id];
+            changed = true;
+          }
+        }
+        return changed ? updated : prev;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     fetchReservations();
+
+    const handleNewReservation = (e) => {
+      const newRes = e.detail;
+      if (newRes && newRes.id) {
+        setHighlightedIds(prev => ({
+          ...prev,
+          [newRes.id]: Date.now()
+        }));
+        
+        // Refresh reservations list
+        fetchReservations();
+      }
+    };
+
+    window.addEventListener('newReservationReceived', handleNewReservation);
+    return () => {
+      window.removeEventListener('newReservationReceived', handleNewReservation);
+    };
   }, [status, date]); // Trigger fetch automatically on date/status filter change
 
   const handleSearchSubmit = (e) => {
@@ -204,9 +242,16 @@ const DashboardReservations = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-border/30">
-                {(Array.isArray(reservations) ? reservations : []).map((res) => (
-                  <React.Fragment key={res.id}>
-                    <tr className={`text-stone-light hover:bg-ebony-light/40 transition-colors ${expandedRow === res.id ? 'bg-ebony-light/25' : ''}`}>
+                {(Array.isArray(reservations) ? reservations : []).map((res) => {
+                  const isNew = highlightedIds[res.id] && (Date.now() - highlightedIds[res.id] < 30000);
+                  const isCreatedRecently = res.created_at && (Date.now() - new Date(res.created_at).getTime() < 30000);
+                  const isHighlighted = isNew || isCreatedRecently;
+                  
+                  return (
+                    <React.Fragment key={res.id}>
+                      <tr className={`text-stone-light hover:bg-ebony-light/40 transition-colors ${
+                        expandedRow === res.id ? 'bg-ebony-light/25' : ''
+                      } ${isHighlighted ? 'animate-reservation-highlight' : ''}`}>
                       <td className="py-4">
                         <button 
                           onClick={() => toggleExpandRow(res.id)}
@@ -281,8 +326,9 @@ const DashboardReservations = () => {
                         </td>
                       </tr>
                     )}
-                  </React.Fragment>
-                ))}
+                    </React.Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>

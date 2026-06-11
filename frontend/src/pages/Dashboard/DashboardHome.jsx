@@ -19,6 +19,7 @@ const DashboardHome = () => {
   const [todayBookings, setTodayBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [highlightedIds, setHighlightedIds] = useState({});
 
   const todayStr = new Date().toISOString().split('T')[0];
 
@@ -58,8 +59,45 @@ const DashboardHome = () => {
     }
   };
 
+  // Cleanup expired highlight states periodically
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHighlightedIds(prev => {
+        const now = Date.now();
+        let updated = { ...prev };
+        let changed = false;
+        for (const [id, timestamp] of Object.entries(prev)) {
+          if (now - timestamp >= 30000) {
+            delete updated[id];
+            changed = true;
+          }
+        }
+        return changed ? updated : prev;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     fetchDashboardData();
+
+    const handleNewReservation = (e) => {
+      const newRes = e.detail;
+      if (newRes && newRes.id) {
+        setHighlightedIds(prev => ({
+          ...prev,
+          [newRes.id]: Date.now()
+        }));
+        
+        // Refresh dashboard statistics and today's list
+        fetchDashboardData();
+      }
+    };
+
+    window.addEventListener('newReservationReceived', handleNewReservation);
+    return () => {
+      window.removeEventListener('newReservationReceived', handleNewReservation);
+    };
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
@@ -170,9 +208,19 @@ const DashboardHome = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-stone-border/30">
-                {(Array.isArray(todayBookings) ? todayBookings : []).map((res) => (
-                  <tr key={res.id} className="text-stone-light hover:bg-ebony-light/50 transition-colors">
-                    <td className="py-4 font-semibold text-white">{res.customer_name}</td>
+                {(Array.isArray(todayBookings) ? todayBookings : []).map((res) => {
+                  const isNew = highlightedIds[res.id] && (Date.now() - highlightedIds[res.id] < 30000);
+                  const isCreatedRecently = res.created_at && (Date.now() - new Date(res.created_at).getTime() < 30000);
+                  const isHighlighted = isNew || isCreatedRecently;
+                  
+                  return (
+                    <tr 
+                      key={res.id} 
+                      className={`text-stone-light hover:bg-ebony-light/50 transition-colors ${
+                        isHighlighted ? 'animate-reservation-highlight' : ''
+                      }`}
+                    >
+                      <td className="py-4 font-semibold text-white">{res.customer_name}</td>
                     <td className="py-4">{res.customer_phone}</td>
                     <td className="py-4 font-serif text-gold">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</td>
                     <td className="py-4">{res.guest_count} persons</td>
@@ -208,7 +256,8 @@ const DashboardHome = () => {
                       )}
                     </td>
                   </tr>
-                ))}
+                );
+                })}
               </tbody>
             </table>
           </div>

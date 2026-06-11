@@ -34,6 +34,12 @@ exports.createReservation = async (req, res) => {
       created_at: new Date()
     };
     mockDb.reservations.push(newRes);
+    
+    const io = req.app.get('socketio');
+    if (io) {
+      io.emit('newReservation', newRes);
+    }
+
     return res.status(201).json(newRes);
   }
 
@@ -54,7 +60,7 @@ exports.createReservation = async (req, res) => {
       ]
     );
 
-    res.status(201).json({
+    const newReservation = {
       id: result.insertId,
       customer_name,
       customer_email,
@@ -64,7 +70,15 @@ exports.createReservation = async (req, res) => {
       guest_count,
       special_requests,
       status: 'pending',
-    });
+      created_at: new Date()
+    };
+
+    const io = req.app.get('socketio');
+    if (io) {
+      io.emit('newReservation', newReservation);
+    }
+
+    res.status(201).json(newReservation);
   } catch (error) {
     console.error('Create reservation error:', error);
     res.status(500).json({ message: 'Error creating reservation', error: error.message });

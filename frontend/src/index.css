@@ -86,3 +86,21 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #C5A880;
 }
+
+/* Real-time Reservation Row Highlight Animation */
+@keyframes row-gold-pulse {
+  0% {
+    background-color: rgba(197, 168, 128, 0.03);
+  }
+  50% {
+    background-color: rgba(197, 168, 128, 0.22);
+  }
+  100% {
+    background-color: rgba(197, 168, 128, 0.03);
+  }
+}
+
+.animate-reservation-highlight {
+  animation: row-gold-pulse 2s infinite ease-in-out;
+  border-left: 4px solid var(--color-gold) !important;
+}
