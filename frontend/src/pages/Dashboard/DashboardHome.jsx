@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { CalendarRange, Utensils, CheckCircle2, Clock, CalendarDays, AlertCircle } from 'lucide-react';
+import { useNotifications } from '../../context/NotificationContext';
 
 const FALLBACK_SUMMARY = {
   totalReservations: 12,
@@ -17,6 +18,7 @@ const FALLBACK_TODAY_BOOKINGS = [
 const DashboardHome = () => {
   const [summary, setSummary] = useState(FALLBACK_SUMMARY);
   const [todayBookings, setTodayBookings] = useState([]);
+  const { isSocketConnected } = useNotifications();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -101,13 +103,19 @@ const DashboardHome = () => {
     };
   }, []);
 
-  // Auto-refresh dashboard data every 5 seconds
+  // Auto-refresh dashboard data every 5 seconds ONLY if WebSocket is offline
   useEffect(() => {
+    if (isSocketConnected) {
+      console.log('🔌 WebSocket active. Skipping dashboard overview polling.');
+      return;
+    }
+
+    console.log('🔄 WebSocket offline. Activating 5-second dashboard overview fallback polling.');
     const interval = setInterval(() => {
       fetchDashboardData();
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isSocketConnected]);
 
   const handleStatusChange = async (id, newStatus) => {
     try {

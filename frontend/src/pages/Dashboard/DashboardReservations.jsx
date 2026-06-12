@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../../utils/api';
 import { Search, Calendar, Filter, AlertCircle, Eye, EyeOff, Trash2, CheckCircle2 } from 'lucide-react';
+import { useNotifications } from '../../context/NotificationContext';
 
 const FALLBACK_RESERVATIONS = [
   { id: 1, customer_name: 'Ananya Sharma (Demo)', customer_email: 'ananya@example.com', customer_phone: '+919876543210', reservation_date: '2026-06-10', reservation_time: '19:30:00', guest_count: 4, special_requests: 'Anniversary celebration. Window table near water channel if possible.', status: 'confirmed' },
-  { id: 2, customer_name: 'Vikram Malhotra (Demo)', customer_email: 'vikram.m@example.com', customer_phone: '+919123456789', reservation_date: '2026-06-10', reservation_time: '21:00:00', guest_count: 2, special_requests: 'No seafood allergies, requesting Teppanyaki seating.', status: 'pending' },
+  { id: 2, customer_name: 'Vikram Malhotra (Demo)', customer_email: 'vikram.m@example.com', customer_phone: '+919123456789', reservation_date: '2026-06-10', reservation_time: '21:00:00', guest_count: 2, status: 'pending' },
   { id: 3, customer_name: 'Rohan Sen (Demo)', customer_email: 'rohan.sen@example.com', customer_phone: '+919988776655', reservation_date: '2026-06-11', reservation_time: '13:00:00', guest_count: 6, special_requests: 'Business lunch. Requires quiet area.', status: 'confirmed' },
   { id: 4, customer_name: 'Priyanka Rao (Demo)', customer_email: 'priyanka@example.com', customer_phone: '+919888877777', reservation_date: '2026-06-08', reservation_time: '20:00:00', guest_count: 3, special_requests: 'Birthday dinner, need candle on dessert.', status: 'confirmed' }
 ];
@@ -15,6 +16,7 @@ const DashboardReservations = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [highlightedIds, setHighlightedIds] = useState({});
+  const { isSocketConnected } = useNotifications();
   
   // Filters
   const [search, setSearch] = useState('');
@@ -103,13 +105,19 @@ const DashboardReservations = () => {
     };
   }, []);
 
-  // Auto-refresh reservation list every 5 seconds
+  // Auto-refresh reservation list every 5 seconds ONLY if WebSocket is offline
   useEffect(() => {
+    if (isSocketConnected) {
+      console.log('🔌 WebSocket active. Skipping reservations list polling.');
+      return;
+    }
+
+    console.log('🔄 WebSocket offline. Activating 5-second reservations list fallback polling.');
     const interval = setInterval(() => {
       fetchReservationsRef.current();
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isSocketConnected]);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
