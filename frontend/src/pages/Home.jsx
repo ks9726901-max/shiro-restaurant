@@ -108,10 +108,10 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-ebony overflow-hidden pt-20">
+    <div className="bg-ebony overflow-hidden pt-0">
       
       {/* 1. Immersive Hero Section */}
-      <header className="relative min-h-[92vh] flex items-center justify-center">
+      <header className="relative min-h-[92vh] flex flex-col items-center justify-center pt-28 pb-12">
         {/* Background Image with Auto-Zoom Breathing */}
         <div 
           className="absolute inset-0 bg-cover bg-center animate-zoom-slow"
