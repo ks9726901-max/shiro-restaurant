@@ -294,7 +294,7 @@ const DashboardHome = () => {
                           : res.status === 'rejected' || res.status === 'cancelled'
                           ? 'bg-burgundy/15 text-crimson-bright border border-burgundy/30'
                           : res.status === 'completed'
-                          ? 'bg-zinc-800 text-stone-light border border-zinc-700'
+                          ? 'bg-jade/20 text-jade-light border border-jade/30'
                           : 'bg-amber/10 text-amber border border-amber/30 animate-pulse'
                       }`}>
                         {res.status}

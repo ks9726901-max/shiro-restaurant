@@ -452,7 +452,7 @@ const Home = () => {
             backgroundImage: 'url("https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&w=1600&q=80")',
           }}
         />
-        <div className="absolute inset-0 bg-black/95" />
+        <div className="absolute inset-0 bg-ebony/95" />
 
         {/* Glassmorphic Container Card */}
         <div className="relative max-w-4xl mx-auto z-10 border border-gold/15 p-1 rounded-2xl bg-gradient-to-br from-gold/5 to-transparent">

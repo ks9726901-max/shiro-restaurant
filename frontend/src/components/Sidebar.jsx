@@ -93,7 +93,7 @@ const Sidebar = () => {
       <div className="p-6 border-t border-stone-border">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-all duration-300 font-sans text-xs tracking-wider uppercase cursor-pointer"
+          className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-stone-border text-stone hover:border-crimson-bright hover:text-crimson-bright transition-all duration-300 font-sans text-xs tracking-wider uppercase cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>Log Out</span>

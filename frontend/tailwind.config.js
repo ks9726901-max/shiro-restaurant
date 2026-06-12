@@ -8,9 +8,9 @@ export default {
     extend: {
       colors: {
         ebony: {
-          DEFAULT: '#0B0B0B',
-          card: '#151515',
-          light: '#222222',
+          DEFAULT: '#4A0E1A',
+          card: '#6D071A',
+          light: '#8C182F',
         },
         gold: {
           DEFAULT: '#D4AF37',
@@ -28,8 +28,8 @@ export default {
           DEFAULT: '#F5F1E8',
         },
         stone: {
-          DEFAULT: '#8D8985',
-          border: '#282522',
+          DEFAULT: '#F5F1E8',
+          border: '#80172B',
           light: '#F5F1E8',
         },
         jade: {
