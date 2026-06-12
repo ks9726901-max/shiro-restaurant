@@ -111,7 +111,7 @@ const Home = () => {
     <div className="bg-ebony overflow-hidden pt-0 text-ivory">
       
       {/* 1. Immersive Hero Section */}
-      <header className="relative pt-32 pb-16">
+      <header className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20">
         {/* Background Image with Auto-Zoom Breathing */}
         <div 
           className="absolute inset-0 bg-cover bg-center animate-zoom-slow"
@@ -158,8 +158,15 @@ const Home = () => {
 
         {/* Premium Scroll Indicator */}
         <div 
-          onClick={() => window.scrollTo({ top: window.innerHeight * 0.9, behavior: 'smooth' })}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center animate-float-slow cursor-pointer group"
+          onClick={() => {
+            const nextSec = document.getElementById('philosophy');
+            if (nextSec) {
+              nextSec.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+            }
+          }}
+          className="relative z-10 mt-16 flex flex-col items-center animate-float-slow cursor-pointer group"
         >
           <span className="text-[9px] tracking-[0.4em] text-stone-light group-hover:text-gold transition-colors duration-300 uppercase mb-2">Scroll To Discover</span>
           <div className="w-8 h-8 rounded-full border border-gold/30 flex items-center justify-center bg-ebony/60 backdrop-blur-sm animate-pulse-gold group-hover:border-gold transition-colors duration-300">
@@ -168,11 +175,11 @@ const Home = () => {
         </div>
 
         {/* Ambient Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-ebony to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-ebony via-ebony/90 to-transparent pointer-events-none" />
       </header>
 
       {/* 2. Highlights Grid */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-28 border-b border-stone-border/30">
+      <section id="philosophy" className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-28 border-b border-stone-border/30">
         <div className="text-center max-w-2xl mx-auto mb-20">
           <span className="text-[10px] tracking-[0.3em] text-gold uppercase font-bold block mb-3">The Shiro Philosophy</span>
           <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wider mb-4">
