@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useNotifications } from '../context/NotificationContext';
 import { 
   CalendarRange, 
@@ -62,35 +62,38 @@ const Sidebar = () => {
 
       {/* Sidebar Links */}
       <nav className="flex-1 p-6 space-y-2">
-        {menuItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.exact}
-            className={({ isActive }) =>
-              `flex items-center space-x-3.5 px-4 py-3 rounded-none font-sans text-xs tracking-wider uppercase transition-all duration-300 ${
+        {menuItems.map((item) => {
+          const isActive = item.exact
+            ? location.pathname === item.path
+            : location.pathname.startsWith(item.path);
+
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`flex items-center space-x-3.5 px-4 py-3 rounded-none font-sans text-xs tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                 isActive
                   ? 'bg-gold/10 text-gold border-l-2 border-gold font-medium'
                   : 'text-stone hover:bg-ebony-light hover:text-gold border-l-2 border-transparent'
-              }`
-            }
-          >
-            <item.icon className="w-4 h-4 shrink-0" />
-            <span>{item.name}</span>
-            {item.name === 'Reservations' && unreadCount > 0 && (
-              <span className="ml-auto bg-gold text-ebony font-sans font-bold text-[10px] px-2 py-0.5 rounded-full animate-bounce">
-                {unreadCount}
-              </span>
-            )}
-          </NavLink>
-        ))}
+              }`}
+            >
+              <item.icon className="w-4 h-4 shrink-0" />
+              <span>{item.name}</span>
+              {item.name === 'Reservations' && unreadCount > 0 && (
+                <span className="ml-auto bg-gold text-ebony font-sans font-bold text-[10px] px-2 py-0.5 rounded-full animate-bounce">
+                  {unreadCount}
+                </span>
+              )}
+            </Link>
+          );
+        })}
       </nav>
 
       {/* Logout Action */}
       <div className="p-6 border-t border-stone-border">
         <button
           onClick={handleLogout}
-          className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-all duration-300 font-sans text-xs tracking-wider uppercase"
+          className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-all duration-300 font-sans text-xs tracking-wider uppercase cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>Log Out</span>

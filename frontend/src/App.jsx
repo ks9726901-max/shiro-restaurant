@@ -21,6 +21,7 @@ import DashboardHome from './pages/Dashboard/DashboardHome';
 import DashboardReservations from './pages/Dashboard/DashboardReservations';
 import DashboardMenu from './pages/Dashboard/DashboardMenu';
 import DashboardReports from './pages/Dashboard/DashboardReports';
+import DashboardNotFound from './pages/Dashboard/DashboardNotFound';
 
 // Auth Guard Component
 const ProtectedRoute = () => {
@@ -183,6 +184,8 @@ function App() {
             <Route path="/dashboard/reservations" element={<DashboardReservations />} />
             <Route path="/dashboard/menu" element={<DashboardMenu />} />
             <Route path="/dashboard/reports" element={<DashboardReports />} />
+            {/* Catch-all dashboard fallback */}
+            <Route path="/dashboard/*" element={<DashboardNotFound />} />
           </Route>
         </Route>
 
