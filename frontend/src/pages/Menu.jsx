@@ -372,21 +372,41 @@ const Menu = () => {
           </div>
         </div>
 
-        {/* Category Tabs */}
-        <div className="flex overflow-x-auto pb-4 mb-12 border-b border-stone-border/30 scrollbar-luxury gap-2 md:justify-center">
-          {Array.isArray(menuCategories) ? menuCategories.map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`px-6 py-3 shrink-0 font-serif text-sm tracking-wider uppercase transition-all duration-300 border-b-2 -mb-[18px] ${
-                activeCategory === cat.id
-                  ? 'border-gold text-gold font-bold'
-                  : 'border-transparent text-stone hover:text-gold-hover'
-              }`}
-            >
-              {cat.name}
-            </button>
-          )) : null}
+        {/* Category Cards Selector */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-12">
+          {Array.isArray(menuCategories) ? menuCategories.map((cat) => {
+            const colors = {
+              1: 'from-amber-950/20 to-gold/5 border-gold/30 hover:border-gold',
+              2: 'from-red-950/20 to-burgundy/5 border-burgundy/30 hover:border-burgundy',
+              3: 'from-amber-950/25 to-amber/5 border-amber/30 hover:border-amber',
+              4: 'from-burgundy-950/20 to-stone/5 border-stone-border hover:border-gold-hover',
+              5: 'from-orange-950/20 to-gold/5 border-gold/20 hover:border-gold',
+              6: 'from-teal-950/20 to-jade/5 border-jade/30 hover:border-jade'
+            };
+            const gradientStyle = colors[cat.id] || 'from-ebony-card to-transparent border-stone-border hover:border-gold';
+            const isActive = activeCategory === cat.id;
+            
+            return (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`relative p-4 rounded-xl border flex flex-col items-center justify-center text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-lg bg-gradient-to-br cursor-pointer ${
+                  isActive
+                    ? 'border-gold text-ivory bg-gold/15 shadow-[0_0_20px_rgba(212,175,55,0.25)]'
+                    : `text-stone-light ${gradientStyle}`
+                }`}
+              >
+                <span className={`font-serif text-xs md:text-sm tracking-wider uppercase transition-colors duration-300 font-semibold ${
+                  isActive ? 'text-gold-bright' : 'text-stone-light group-hover:text-white'
+                }`}>
+                  {cat.name}
+                </span>
+                {isActive && (
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-gold via-amber to-gold" />
+                )}
+              </button>
+            );
+          }) : null}
         </div>
 
         {/* Menu Items Grid */}
@@ -404,25 +424,25 @@ const Menu = () => {
             {filteredItems.map((item) => (
               <div 
                 key={item.id} 
-                className="bg-ebony-card border border-stone-border/40 p-6 flex flex-col sm:flex-row gap-6 hover:border-gold/30 transition-all duration-500 hover:shadow-xl group"
+                className="bg-ebony-card border border-stone-border/40 p-6 flex flex-col sm:flex-row gap-6 hover:border-gold/40 transition-all duration-500 hover:shadow-[0_8px_30px_rgba(212,175,55,0.08)] hover:-translate-y-1 rounded-2xl group"
               >
                 {/* Image Container */}
-                <div className="relative w-full sm:w-36 h-36 shrink-0 bg-ebony-light border border-stone-border overflow-hidden">
+                <div className="relative w-full sm:w-36 h-36 shrink-0 bg-ebony-light border border-stone-border overflow-hidden rounded-xl">
                   <img
-                    src={item.image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=300&q=80'}
+                    src={item.image_url || 'https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=400&q=80'}
                     alt={item.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 filter brightness-95"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 filter brightness-90 group-hover:brightness-100"
                   />
                   
                   {/* Badges on Top of Image */}
                   <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
                     {item.is_signature && (
-                      <span className="p-1 bg-gold text-ebony rounded-none shadow-md" title="Signature dish">
+                      <span className="p-1.5 bg-gold/90 text-ebony rounded-lg shadow-md" title="Signature dish">
                         <Sparkles className="w-3.5 h-3.5 fill-current" />
                       </span>
                     )}
                     {item.is_vegetarian && (
-                      <span className="p-1 bg-green-900 text-green-300 border border-green-500/30 rounded-none shadow-md" title="Vegetarian">
+                      <span className="p-1.5 bg-green-950/90 text-green-300 border border-green-500/30 rounded-lg shadow-md" title="Vegetarian">
                         <Leaf className="w-3.5 h-3.5" />
                       </span>
                     )}
@@ -434,10 +454,10 @@ const Menu = () => {
                   <div>
                     {/* Header: Title & Price */}
                     <div className="flex justify-between items-start gap-4 mb-2">
-                      <h3 className="font-serif text-lg font-semibold text-white tracking-wide group-hover:text-gold transition-colors duration-300">
+                      <h3 className="font-serif text-lg font-semibold text-ivory tracking-wide group-hover:text-gold transition-colors duration-300">
                         {item.name}
                       </h3>
-                      <span className="font-serif text-gold font-medium text-lg whitespace-nowrap">
+                      <span className="font-serif text-gold font-bold text-lg whitespace-nowrap text-glow animate-pulse-gold">
                         ₹{parseFloat(item.price).toFixed(2)}
                       </span>
                     </div>
@@ -449,15 +469,15 @@ const Menu = () => {
                   </div>
 
                   {/* Dietary Info Summary Bar */}
-                  <div className="mt-4 flex items-center space-x-3 text-[10px] tracking-wider uppercase text-stone-light">
+                  <div className="mt-4 flex items-center space-x-3 text-[10px] tracking-wider uppercase">
                     {item.is_vegan && (
-                      <span className="text-green-500">Vegan Choice</span>
+                      <span className="text-green-400 font-semibold">Vegan Choice</span>
                     )}
                     {item.is_vegetarian && !item.is_vegan && (
-                      <span className="text-green-400">Vegetarian Choice</span>
+                      <span className="text-green-400 font-medium">Vegetarian Choice</span>
                     )}
                     {!item.is_vegetarian && (
-                      <span>Non-Vegetarian</span>
+                      <span className="text-stone-light/60">Non-Vegetarian</span>
                     )}
                   </div>
                 </div>

@@ -154,28 +154,28 @@ const Reservation = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           
           {/* Booking Guidelines / Info Panel */}
-          <div className="md:col-span-1 bg-ebony-card border border-stone-border/40 p-6 md:p-8 flex flex-col space-y-6">
-            <h3 className="font-serif text-base font-semibold text-gold uppercase tracking-wider">
+          <div className="md:col-span-1 bg-ebony-card border border-stone-border/40 p-6 md:p-8 flex flex-col space-y-6 rounded-2xl hover:border-gold/30 transition-all duration-500 shadow-xl">
+            <h3 className="font-serif text-lg font-semibold text-gold uppercase tracking-wider">
               Dining Policies
             </h3>
             
             <div className="space-y-4 text-xs font-light leading-relaxed">
-              <div>
+              <div className="border-l-2 border-gold/40 pl-4 py-1">
                 <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Confirmation</p>
                 <p>All online bookings are received as 'pending' and are confirmed via email/SMS by our host within 30 minutes.</p>
               </div>
 
-              <div>
+              <div className="border-l-2 border-burgundy/40 pl-4 py-1">
                 <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Dress Code</p>
                 <p>Smart Casuals. Sleeveless shirts, open sandals (men), and active sportswear are discouraged.</p>
               </div>
 
-              <div>
+              <div className="border-l-2 border-amber/40 pl-4 py-1">
                 <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Grace Period</p>
                 <p>Reservations are held for a maximum of 15 minutes past the scheduled time before being released to walk-in guests.</p>
               </div>
 
-              <div>
+              <div className="border-l-2 border-stone-border pl-4 py-1">
                 <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Large Parties</p>
                 <p>For bookings exceeding 10 guests, please contact our events team at +91 80 4173 8888.</p>
               </div>
@@ -183,11 +183,11 @@ const Reservation = () => {
           </div>
 
           {/* Reservation Form */}
-          <div className="md:col-span-2 bg-ebony-card border border-stone-border/40 p-6 md:p-8">
+          <div className="md:col-span-2 bg-ebony-card border border-stone-border/40 p-6 md:p-8 rounded-2xl hover:border-gold/30 transition-all duration-500 shadow-xl">
             <form onSubmit={handleSubmit} className="space-y-6">
               
               {error && (
-                <div className="p-4 bg-crimson/10 border border-crimson/30 text-crimson text-xs font-light rounded-none">
+                <div className="p-4 bg-crimson/10 border border-crimson/30 text-crimson text-xs font-light rounded-xl">
                   {error}
                 </div>
               )}
@@ -206,7 +206,7 @@ const Reservation = () => {
                     value={formData.customer_name}
                     onChange={handleInputChange}
                     placeholder="e.g. Vikram Malhotra"
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors duration-300"
+                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
                   />
                 </div>
 
@@ -222,7 +222,7 @@ const Reservation = () => {
                     value={formData.customer_phone}
                     onChange={handleInputChange}
                     placeholder="e.g. +91 98765 43210"
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors duration-300"
+                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -239,7 +239,7 @@ const Reservation = () => {
                   value={formData.customer_email}
                   onChange={handleInputChange}
                   placeholder="e.g. vikram@example.com"
-                  className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors duration-300"
+                  className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
                 />
               </div>
 
@@ -258,7 +258,7 @@ const Reservation = () => {
                       min={today}
                       value={formData.reservation_date}
                       onChange={handleInputChange}
-                      className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white focus:outline-none focus:border-gold transition-colors duration-300"
+                      className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
                     />
                   </div>
                 </div>
@@ -273,7 +273,7 @@ const Reservation = () => {
                     required
                     value={formData.reservation_time}
                     onChange={handleInputChange}
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-stone-light focus:outline-none focus:border-gold transition-colors duration-300 appearance-none rounded-none"
+                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-stone-light rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 appearance-none cursor-pointer"
                   >
                     <option value="">Select Time</option>
                     {TIME_SLOTS.map((time) => (
@@ -295,7 +295,7 @@ const Reservation = () => {
                     max="10"
                     value={formData.guest_count}
                     onChange={handleInputChange}
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white focus:outline-none focus:border-gold transition-colors duration-300"
+                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
                   />
                 </div>
               </div>
@@ -312,7 +312,7 @@ const Reservation = () => {
                   value={formData.special_requests}
                   onChange={handleInputChange}
                   placeholder="e.g. Requiring high chair for toddler, anniversary dinner, peanut allergies..."
-                  className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors duration-300 resize-none"
+                  className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 resize-none"
                 />
               </div>
 
@@ -320,7 +320,7 @@ const Reservation = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 disabled:bg-stone/50 disabled:text-stone-light rounded-none shadow-lg"
+                className="w-full py-3.5 bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 disabled:bg-stone/50 disabled:text-stone-light rounded-xl shadow-lg cursor-pointer"
               >
                 {loading ? 'Processing booking...' : 'Request Reservation'}
               </button>
@@ -350,7 +350,7 @@ const Reservation = () => {
               Reservation received successfully. Our team will contact you shortly.
             </p>
 
-            <div className="w-full bg-ebony border border-stone-border/40 p-4 text-left font-sans text-xs space-y-2.5 my-4">
+            <div className="w-full bg-ebony border border-stone-border/40 p-4 text-left font-sans text-xs space-y-2.5 my-4 rounded-xl">
               <div className="flex justify-between border-b border-stone-border/30 pb-2">
                 <span className="text-stone">Booking ID:</span>
                 <span className="font-semibold text-white">#SHR-{bookedDetails.id}</span>
@@ -369,7 +369,7 @@ const Reservation = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-stone">Status:</span>
-                <span className="px-2 py-0.5 bg-gold/10 text-gold uppercase font-bold text-[10px] tracking-widest">
+                <span className="px-2 py-0.5 bg-gold/10 text-gold uppercase font-bold text-[10px] tracking-widest rounded">
                   {bookedDetails.status}
                 </span>
               </div>
@@ -377,7 +377,7 @@ const Reservation = () => {
 
             <button
               onClick={() => setSuccessModal(false)}
-              className="px-6 py-2.5 bg-gold text-ebony font-sans text-xs uppercase tracking-widest hover:bg-gold-hover transition-all duration-300 font-semibold"
+              className="px-8 py-3 rounded-xl bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-xs uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 font-semibold cursor-pointer"
             >
               Done
             </button>

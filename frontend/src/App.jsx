@@ -79,7 +79,7 @@ const DashboardLayoutContent = () => {
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-crimson-bright text-white font-sans font-bold text-[9px] flex items-center justify-center rounded-full border border-ebony animate-pulse">
+                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans font-bold text-[9px] flex items-center justify-center rounded-full border border-ebony animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.5)]">
                   {unreadCount}
                 </span>
               )}

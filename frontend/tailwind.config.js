@@ -8,20 +8,29 @@ export default {
     extend: {
       colors: {
         ebony: {
-          DEFAULT: '#0B0A0A',
-          card: '#151313',
-          light: '#201E1E',
+          DEFAULT: '#0B0B0B',
+          card: '#151515',
+          light: '#222222',
         },
         gold: {
-          DEFAULT: '#C5A880',
-          bright: '#D4AF37',
-          hover: '#E6D3B8',
-          dark: '#9F845C',
+          DEFAULT: '#D4AF37',
+          bright: '#F0C23A',
+          hover: '#FFE28A',
+          dark: '#9A7D1C',
+        },
+        amber: {
+          DEFAULT: '#FFB347',
+        },
+        burgundy: {
+          DEFAULT: '#6D071A',
+        },
+        ivory: {
+          DEFAULT: '#F5F1E8',
         },
         stone: {
-          DEFAULT: '#7D7975',
-          border: '#2A2827',
-          light: '#A39F9C',
+          DEFAULT: '#8D8985',
+          border: '#282522',
+          light: '#F5F1E8',
         },
         jade: {
           DEFAULT: '#1A3D3C',
@@ -29,8 +38,8 @@ export default {
           light: '#428E8C',
         },
         crimson: {
-          DEFAULT: '#8B0000',
-          bright: '#C00000',
+          DEFAULT: '#6D071A',
+          bright: '#9B1C31',
         }
       },
       fontFamily: {

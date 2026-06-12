@@ -108,7 +108,7 @@ const Home = () => {
   };
 
   return (
-    <div className="bg-ebony overflow-hidden pt-0">
+    <div className="bg-ebony overflow-hidden pt-0 text-ivory">
       
       {/* 1. Immersive Hero Section */}
       <header className="relative pt-32 pb-16">
@@ -120,33 +120,36 @@ const Home = () => {
           }}
         />
         {/* Luxury dark gradient overlay mask */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-ebony/75 to-ebony" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-ebony/80 to-ebony" />
+
+        {/* Ambient Warm Gold Radial Glow behind content */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/10 blur-[150px] pointer-events-none" />
 
         {/* Hero Content Wrapper for Vertical Centering & browser height bugs */}
         <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center z-10 animate-fade-in-up">
-          <div className="inline-flex items-center space-x-2 border border-gold/45 px-4 py-1.5 bg-gold/5 mb-8 rounded-full shadow-[0_0_15px_rgba(197,168,128,0.15)]">
+          <div className="inline-flex items-center space-x-2 border border-gold/45 px-4 py-1.5 bg-gold/5 mb-8 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)]">
             <span className="text-[10px] tracking-[0.35em] text-gold uppercase font-semibold">UB City, Bengaluru</span>
           </div>
 
-          <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-wider leading-tight text-white mb-6">
+          <h1 className="font-serif text-5xl md:text-7xl font-bold tracking-wider leading-tight text-ivory mb-6">
             An Asian Castle <br />
-            <span className="gold-gradient-text text-glow">Of Culinary Art</span>
+            <span className="gold-gradient-text text-glow-bright">Of Culinary Art</span>
           </h1>
 
-          <p className="text-stone-light font-light text-base md:text-lg max-w-2xl leading-relaxed mb-10">
+          <p className="text-ivory/80 font-light text-base md:text-lg max-w-2xl leading-relaxed mb-10">
             Dine beneath 50-foot bamboo ceilings flanked by towering Balinese stone sculptures, cascading waterfalls, and tranquil lotus ponds.
           </p>
 
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
             <Link
               to="/reservation"
-              className="px-8 py-4 bg-gold text-ebony font-sans text-xs font-semibold tracking-widest uppercase hover:bg-gold-hover hover:scale-105 transition-all duration-300 shadow-[0_4px_20px_rgba(197,168,128,0.3)]"
+              className="px-8 py-4 rounded-xl bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:scale-105 transition-all duration-300 shadow-[0_4px_25px_rgba(212,175,55,0.3)] hover:shadow-[0_4px_35px_rgba(255,179,71,0.45)]"
             >
               Reserve A Table
             </Link>
             <Link
               to="/menu"
-              className="px-8 py-4 bg-transparent border border-stone-light/45 text-stone-light font-sans text-xs font-semibold tracking-widest uppercase hover:border-gold hover:text-gold hover:bg-gold/5 transition-all duration-300"
+              className="px-8 py-4 rounded-xl bg-transparent border border-gold/40 text-gold font-sans text-xs font-semibold tracking-widest uppercase hover:border-gold hover:text-white hover:bg-gold/10 transition-all duration-300"
             >
               Explore Menu
             </Link>

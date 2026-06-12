@@ -330,16 +330,14 @@ const DashboardReservations = () => {
                       </td>
                       <td className="py-4 font-semibold text-white">{res.guest_count} persons</td>
                       <td className="py-4">
-                        <span className={`px-2 py-0.5 font-bold uppercase text-[9px] tracking-widest ${
+                        <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] tracking-widest ${
                           res.status === 'confirmed' 
-                            ? 'bg-green-950 text-green-400 border border-green-500/20' 
-                            : res.status === 'rejected'
-                            ? 'bg-red-950 text-red-400 border border-red-500/20'
+                            ? 'bg-gold/10 text-gold border border-gold/30' 
+                            : res.status === 'rejected' || res.status === 'cancelled'
+                            ? 'bg-burgundy/15 text-crimson-bright border border-burgundy/30'
                             : res.status === 'completed'
-                            ? 'bg-blue-950 text-blue-400 border border-blue-500/20'
-                            : res.status === 'cancelled'
-                            ? 'bg-stone-900 text-stone-400 border border-stone-500/20'
-                            : 'bg-yellow-950 text-yellow-400 border border-yellow-500/20'
+                            ? 'bg-zinc-800 text-stone-light border border-zinc-700'
+                            : 'bg-amber/10 text-amber border border-amber/30 animate-pulse'
                         }`}>
                           {res.status}
                         </span>

@@ -101,35 +101,37 @@ const Gallery = () => {
           ))}
         </div>
 
-        {/* Images Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {/* Images Grid (Masonry Columns Layout) */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 [column-fill:_balance] space-y-6">
           {filteredImages.map((img) => (
             <div 
               key={img.id}
               onClick={() => setLightboxImage(img)}
-              className="bg-ebony-card border border-stone-border/40 p-3 group cursor-pointer hover:border-gold/40 transition-all duration-500 flex flex-col h-full"
+              className="break-inside-avoid bg-ebony-card border border-stone-border/40 p-4 group cursor-pointer hover:border-gold/40 transition-all duration-500 flex flex-col rounded-2xl hover:shadow-[0_8px_25px_rgba(212,175,55,0.08)] mb-6"
             >
-              <div className="relative overflow-hidden h-64 border border-stone-border">
+              <div className="relative overflow-hidden rounded-xl border border-stone-border">
                 <img 
                   src={img.image} 
                   alt={img.title}
-                  className="w-full h-full object-cover filter brightness-90 group-hover:brightness-100 group-hover:scale-105 transition-all duration-700"
+                  className="w-full h-auto object-cover filter brightness-90 group-hover:brightness-100 group-hover:scale-110 transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <Maximize2 className="w-6 h-6 text-gold animate-pulse" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="p-3 bg-ebony-card/90 border border-gold/30 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <Maximize2 className="w-5 h-5 text-gold animate-pulse" />
+                  </div>
                 </div>
               </div>
               
-              <div className="pt-4 pb-2 px-2 flex-1 flex flex-col justify-between">
+              <div className="pt-4 pb-1 px-1 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-serif text-sm font-semibold text-white tracking-wide mb-1 group-hover:text-gold transition-colors duration-300">
+                  <h3 className="font-serif text-sm font-semibold text-ivory tracking-wide mb-1 group-hover:text-gold transition-colors duration-300">
                     {img.title}
                   </h3>
                   <p className="text-[11px] font-light text-stone leading-relaxed">
                     {img.description}
                   </p>
                 </div>
-                <span className="text-[9px] tracking-widest uppercase text-gold/60 mt-3 block">
+                <span className="text-[9px] tracking-[0.2em] uppercase text-gold/60 mt-3 block font-medium">
                   {img.category}
                 </span>
               </div>

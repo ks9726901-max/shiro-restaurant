@@ -3,25 +3,29 @@
 @import "tailwindcss";
 
 @theme {
-  --color-ebony: #0B0A0A;
-  --color-ebony-card: #151313;
-  --color-ebony-light: #201E1E;
+  --color-ebony: #0B0B0B;
+  --color-ebony-card: #151515;
+  --color-ebony-light: #222222;
   
-  --color-gold: #C5A880;
-  --color-gold-bright: #D4AF37;
-  --color-gold-hover: #E6D3B8;
-  --color-gold-dark: #9F845C;
+  --color-gold: #D4AF37;
+  --color-gold-bright: #F0C23A;
+  --color-gold-hover: #FFE28A;
+  --color-gold-dark: #9A7D1C;
   
-  --color-stone: #7D7975;
-  --color-stone-border: #2A2827;
-  --color-stone-light: #A39F9C;
+  --color-amber: #FFB347;
+  --color-burgundy: #6D071A;
+  --color-ivory: #F5F1E8;
+  
+  --color-stone: #8D8985;
+  --color-stone-border: #282522;
+  --color-stone-light: #F5F1E8;
   
   --color-jade: #1A3D3C;
   --color-jade-hover: #2D6A68;
   --color-jade-light: #428E8C;
   
-  --color-crimson: #8B0000;
-  --color-crimson-bright: #C00000;
+  --color-crimson: #6D071A;
+  --color-crimson-bright: #9B1C31;
 
   --font-serif: "Playfair Display", Georgia, serif;
   --font-sans: Inter, system-ui, sans-serif;
@@ -40,30 +44,38 @@
 
 @layer utilities {
   .gold-gradient {
-    background: linear-gradient(135deg, #E6D3B8 0%, #C5A880 50%, #9F845C 100%);
+    background: linear-gradient(135deg, #FFE28A 0%, #D4AF37 50%, #9A7D1C 100%);
   }
   
   .gold-gradient-text {
-    background: linear-gradient(135deg, #E6D3B8 0%, #C5A880 50%, #9F845C 100%);
+    background: linear-gradient(135deg, #FFE28A 0%, #D4AF37 50%, #9A7D1C 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
+  .amber-gradient {
+    background: linear-gradient(135deg, #FFB347 0%, #D4AF37 100%);
+  }
+
+  .burgundy-gradient {
+    background: linear-gradient(135deg, #9B1C31 0%, #6D071A 100%);
+  }
+
   .text-glow {
-    text-shadow: 0 0 10px rgba(197, 168, 128, 0.4);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
   }
 
   .text-glow-bright {
-    text-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+    text-shadow: 0 0 15px rgba(255, 179, 71, 0.6);
   }
 
   .glassmorphism {
-    @apply bg-ebony-card/80 backdrop-blur-md border border-stone-border;
+    @apply bg-ebony-card/85 backdrop-blur-md border border-stone-border;
   }
 
   .scrollbar-luxury {
     scrollbar-width: thin;
-    scrollbar-color: #C5A880 #0B0A0A;
+    scrollbar-color: #D4AF37 #0B0B0B;
   }
 }
 
@@ -74,17 +86,17 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0B0A0A;
+  background: #0B0B0B;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2A2827;
+  background: #282522;
   border-radius: 4px;
-  border: 2px solid #0B0A0A;
+  border: 2px solid #0B0B0B;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #C5A880;
+  background: #D4AF37;
 }
 
 /* Real-time Reservation Row Highlight Animation */

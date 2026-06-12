@@ -55,37 +55,47 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-10">
           <div className="flex space-x-8">
-            {navLinks.map((link) => (
-              <NavLink
-                key={link.path}
-                to={link.path}
-                className={({ isActive }) =>
-                  `font-sans text-sm tracking-widest uppercase transition-all duration-300 pb-1 border-b ${
+            {navLinks.map((link) => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={`relative font-sans text-xs tracking-[0.2em] uppercase transition-all duration-300 py-1 group ${
                     isActive
-                      ? 'text-gold border-gold font-medium'
-                      : 'text-stone-light border-transparent hover:text-gold hover:border-gold/30'
-                  }`
-                }
-              >
-                {link.name}
-              </NavLink>
-            ))}
+                      ? 'text-gold font-bold text-glow'
+                      : 'text-stone-light hover:text-gold-hover'
+                  }`}
+                >
+                  <span>{link.name}</span>
+                  <span 
+                    className={`absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-gold via-amber to-gold transition-all duration-500 origin-left ${
+                      isActive ? 'w-full scale-x-100' : 'w-0 scale-x-0 group-hover:w-full group-hover:scale-x-100'
+                    }`}
+                  />
+                  {isActive && (
+                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-burgundy rounded-full animate-pulse shadow-[0_0_8px_#6D071A]" />
+                  )}
+                </Link>
+              );
+            })}
           </div>
-
+ 
           <div className="flex items-center space-x-6 border-l border-stone-border pl-8">
             {/* Direct CTA */}
             <Link
               to="/reservation"
-              className="px-6 py-2.5 bg-transparent border border-gold text-gold font-sans text-xs uppercase tracking-widest hover:bg-gold hover:text-ebony transition-all duration-500 font-medium"
+              className="relative px-6 py-2.5 overflow-hidden group rounded-lg bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-[11px] font-bold uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] transition-all duration-300"
             >
-              Book Table
+              <span className="relative z-10">Book Table</span>
+              <span className="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
             </Link>
-
+ 
             {/* Subtle Staff Link */}
             <Link
               to="/login"
               title="Staff Dashboard"
-              className="text-stone hover:text-gold transition-colors duration-300"
+              className="text-stone hover:text-gold transition-colors duration-300 hover:scale-110"
             >
               <ShieldAlert className="w-5 h-5" />
             </Link>
