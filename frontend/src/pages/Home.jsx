@@ -111,22 +111,22 @@ const Home = () => {
     <div className="bg-ebony overflow-hidden pt-0 text-ivory">
       
       {/* 1. Immersive Hero Section */}
-      <header className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20">
+      <header className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-20 bg-ebony">
         {/* Background Image with Auto-Zoom Breathing */}
         <div 
-          className="absolute inset-0 bg-cover bg-center animate-zoom-slow"
+          className="absolute inset-0 bg-cover bg-center animate-zoom-slow z-0"
           style={{ 
             backgroundImage: 'url("https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1600&q=80")',
           }}
         />
         {/* Luxury dark gradient overlay mask */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-ebony/80 to-ebony" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-ebony/80 to-ebony z-10" />
 
         {/* Ambient Warm Gold Radial Glow behind content */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/10 blur-[150px] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-gold/10 blur-[150px] pointer-events-none z-10" />
 
         {/* Hero Content Wrapper for Vertical Centering & browser height bugs */}
-        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center z-10 animate-fade-in-up">
+        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center z-20 animate-fade-in-up">
           <div className="inline-flex items-center space-x-2 border border-gold/45 px-4 py-1.5 bg-gold/5 mb-8 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.2)]">
             <span className="text-[10px] tracking-[0.35em] text-gold uppercase font-semibold">UB City, Bengaluru</span>
           </div>
@@ -166,7 +166,7 @@ const Home = () => {
               window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
             }
           }}
-          className="relative z-10 mt-16 flex flex-col items-center animate-float-slow cursor-pointer group"
+          className="relative z-20 mt-16 flex flex-col items-center animate-float-slow cursor-pointer group"
         >
           <span className="text-[9px] tracking-[0.4em] text-stone-light group-hover:text-gold transition-colors duration-300 uppercase mb-2">Scroll To Discover</span>
           <div className="w-8 h-8 rounded-full border border-gold/30 flex items-center justify-center bg-ebony/60 backdrop-blur-sm animate-pulse-gold group-hover:border-gold transition-colors duration-300">
@@ -175,7 +175,7 @@ const Home = () => {
         </div>
 
         {/* Ambient Bottom Gradient */}
-        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-ebony via-ebony/90 to-transparent pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-ebony via-ebony/90 to-transparent pointer-events-none z-10" />
       </header>
 
       {/* 2. Highlights Grid */}
