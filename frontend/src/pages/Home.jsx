@@ -111,7 +111,7 @@ const Home = () => {
     <div className="bg-ebony overflow-hidden pt-0">
       
       {/* 1. Immersive Hero Section */}
-      <header className="relative min-h-[92vh] flex flex-col items-center justify-center pt-28 pb-12">
+      <header className="relative min-h-[92vh] pt-28 pb-16">
         {/* Background Image with Auto-Zoom Breathing */}
         <div 
           className="absolute inset-0 bg-cover bg-center animate-zoom-slow"
@@ -122,8 +122,8 @@ const Home = () => {
         {/* Luxury dark gradient overlay mask */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-ebony/75 to-ebony" />
 
-        {/* Hero Content */}
-        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center z-10 animate-fade-in-up">
+        {/* Hero Content Wrapper for Vertical Centering & browser height bugs */}
+        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center min-h-[calc(92vh-11rem)] z-10 animate-fade-in-up">
           <div className="inline-flex items-center space-x-2 border border-gold/45 px-4 py-1.5 bg-gold/5 mb-8 rounded-full shadow-[0_0_15px_rgba(197,168,128,0.15)]">
             <span className="text-[10px] tracking-[0.35em] text-gold uppercase font-semibold">UB City, Bengaluru</span>
           </div>
