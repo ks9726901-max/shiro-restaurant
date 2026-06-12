@@ -111,7 +111,7 @@ const Home = () => {
     <div className="bg-ebony overflow-hidden pt-0">
       
       {/* 1. Immersive Hero Section */}
-      <header className="relative min-h-[92vh] pt-28 pb-16">
+      <header className="relative pt-32 pb-16">
         {/* Background Image with Auto-Zoom Breathing */}
         <div 
           className="absolute inset-0 bg-cover bg-center animate-zoom-slow"
@@ -123,7 +123,7 @@ const Home = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-ebony/75 to-ebony" />
 
         {/* Hero Content Wrapper for Vertical Centering & browser height bugs */}
-        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center min-h-[calc(92vh-11rem)] z-10 animate-fade-in-up">
+        <div className="relative max-w-4xl mx-auto px-6 text-center flex flex-col items-center justify-center z-10 animate-fade-in-up">
           <div className="inline-flex items-center space-x-2 border border-gold/45 px-4 py-1.5 bg-gold/5 mb-8 rounded-full shadow-[0_0_15px_rgba(197,168,128,0.15)]">
             <span className="text-[10px] tracking-[0.35em] text-gold uppercase font-semibold">UB City, Bengaluru</span>
           </div>
@@ -169,7 +169,7 @@ const Home = () => {
       </header>
 
       {/* 2. Highlights Grid */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-12 py-28 border-b border-stone-border/30">
+      <section className="max-w-7xl mx-auto px-6 lg:px-12 pt-14 pb-28 border-b border-stone-border/30">
         <div className="text-center max-w-2xl mx-auto mb-20">
           <span className="text-[10px] tracking-[0.3em] text-gold uppercase font-bold block mb-3">The Shiro Philosophy</span>
           <h2 className="text-3xl md:text-4xl font-bold uppercase tracking-wider mb-4">
