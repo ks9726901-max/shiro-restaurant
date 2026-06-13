@@ -38,12 +38,12 @@ const GoogleMapSection = ({ isLarge = false }) => {
     return () => clearTimeout(timer);
   }, [isLoading]);
 
-  // Clean, standard Google Maps free embed url targeting the specified Plus Code
-  const mapEmbedUrl = "https://maps.google.com/maps?q=VM7H%2BFCP%20Doddanagamangala%20Village%20Karnataka%20India&t=&z=16&ie=UTF8&iwloc=&output=embed";
+  // Google Maps free embed url targeting the exact address
+  const mapEmbedUrl = "https://maps.google.com/maps?q=3rd+Floor,+222,+Vittal+Mallya+Rd,+Ashok+Nagar,+Bengaluru,+Karnataka+560001&t=&z=16&ie=UTF8&iwloc=&output=embed";
   
   // Directions and Google Maps web URLs
-  const directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=VM7H%2BFCP,+Doddanagamangala+Village,+Karnataka,+India";
-  const mapsSearchUrl = "https://www.google.com/maps/search/?api=1&query=VM7H%2BFCP,+Doddanagamangala+Village,+Karnataka,+India";
+  const directionsUrl = "https://www.google.com/maps/dir/?api=1&destination=3rd+Floor,+222,+Vittal+Mallya+Rd,+Ashok+Nagar,+Bengaluru,+Karnataka+560001";
+  const mapsSearchUrl = "https://maps.google.com/?q=3rd+Floor,+222,+Vittal+Mallya+Rd,+Ashok+Nagar,+Bengaluru,+Karnataka+560001";
 
   return (
     <section 
@@ -99,7 +99,7 @@ const GoogleMapSection = ({ isLarge = false }) => {
 
             {/* Embedded map iframe */}
             <iframe
-              title="Shiro Restaurant Location Map"
+              title="Shiro Bengaluru Location Map"
               src={mapEmbedUrl}
               className={`w-full border-0 rounded-[18px] filter grayscale-[70%] invert-[90%] contrast-[95%] brightness-[90%] hue-rotate-[180deg] transition-all duration-700 group-hover:grayscale-[20%] group-hover:brightness-[95%] ${
                 isLarge ? 'h-[400px] md:h-[500px]' : 'h-[320px] md:h-[420px]'
@@ -118,7 +118,7 @@ const GoogleMapSection = ({ isLarge = false }) => {
               <div>
                 <span className="text-[9px] tracking-[0.3em] text-gold uppercase font-medium block mb-2 font-sans">Find Shiro</span>
                 <h3 className="font-serif text-xl md:text-2xl font-normal text-white uppercase tracking-wider">
-                  The Shiro Sanctuary
+                  Shiro Bengaluru
                 </h3>
                 <div className="w-10 h-[1px] bg-gold/40 mt-3" />
               </div>
@@ -132,9 +132,9 @@ const GoogleMapSection = ({ isLarge = false }) => {
                   <div className="space-y-1">
                     <h4 className="text-[9px] tracking-widest uppercase text-stone/40 font-medium font-sans">Address</h4>
                     <p className="text-xs font-light leading-relaxed text-stone/75">
-                      VM7H+FCP, Doddanagamangala Village,<br />
-                      Bengaluru South, Bengaluru,<br />
-                      Karnataka 560100, India
+                      3rd Floor, 222, Vittal Mallya Rd,<br />
+                      KG Halli, D' Souza Layout, Ashok Nagar,<br />
+                      Bengaluru, Karnataka 560001, India
                     </p>
                   </div>
                 </div>
@@ -143,7 +143,7 @@ const GoogleMapSection = ({ isLarge = false }) => {
                 <div className="flex items-start space-x-4">
                   <Phone className="w-4 h-4 text-gold shrink-0 mt-0.5 stroke-[1.5]" />
                   <div className="space-y-1">
-                    <h4 className="text-[9px] tracking-widest uppercase text-stone/40 font-medium font-sans">Reservations Hotline</h4>
+                    <h4 className="text-[9px] tracking-widest uppercase text-stone/40 font-medium font-sans">Reservations & Host Desk</h4>
                     <p className="text-xs font-mono text-stone/75">
                       +91 80 4173 8861<br />
                       +91 80 4173 8864
