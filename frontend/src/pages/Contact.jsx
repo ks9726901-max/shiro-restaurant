@@ -148,7 +148,7 @@ const Contact = () => {
       </div>
 
       {/* Interactive Map Section */}
-      <GoogleMapSection />
+      <GoogleMapSection isLarge={true} />
     </div>
   );
 };
