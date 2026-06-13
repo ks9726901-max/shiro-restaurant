@@ -69,69 +69,72 @@ const Gallery = () => {
     : GALLERY_IMAGES.filter(img => img.category === filter);
 
   return (
-    <div className="bg-ebony min-h-screen pt-28 pb-20 text-stone">
+    <div className="bg-ebony min-h-screen pt-32 pb-24 text-stone">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         
         {/* Header Title */}
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-[10px] tracking-[0.3em] text-gold uppercase font-semibold">Visual Atmosphere</span>
-          <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-wider mt-2 mb-4">
-            Gallery
+        <div className="text-center max-w-2xl mx-auto mb-20">
+          <span className="text-[9px] tracking-[0.4em] text-gold uppercase font-medium block mb-3">Visual Atmosphere</span>
+          <h1 className="text-4xl md:text-5xl font-serif font-light text-white tracking-wide mt-2 mb-4">
+            The Gallery
           </h1>
-          <div className="w-20 h-0.5 bg-gold mx-auto mb-4" />
-          <p className="text-xs font-light text-stone-light">
-            An inside look at our soaring architectural volumes, dramatic carvings, and detailed culinary creations.
+          <div className="w-12 h-[1px] bg-gold/40 mx-auto mb-4" />
+          <p className="text-xs font-light text-stone/60 leading-relaxed">
+            An inside look at our soaring architectural volumes, Balinese stone carvings, and meticulously detailed culinary creations.
           </p>
         </div>
 
         {/* Filter Navigation */}
-        <div className="flex justify-center space-x-4 mb-12 border-b border-stone-border/30 pb-6">
+        <div className="flex justify-center space-x-6 mb-16 border-b border-stone-border/20 pb-6 text-[10px] tracking-widest uppercase font-medium">
           {['all', 'ambiance', 'dishes', 'cocktails'].map((cat) => (
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-5 py-2 font-sans text-xs tracking-widest uppercase transition-all duration-300 ${
+              className={`relative py-2 transition-all duration-300 cursor-pointer ${
                 filter === cat
-                  ? 'bg-gold text-ebony font-semibold'
-                  : 'bg-transparent text-stone hover:text-gold-hover'
+                  ? 'text-gold'
+                  : 'text-stone/60 hover:text-gold-hover'
               }`}
             >
-              {cat}
+              <span>{cat}</span>
+              {filter === cat && (
+                <span className="absolute bottom-0 left-0 w-full h-[1px] bg-gold" />
+              )}
             </button>
           ))}
         </div>
 
-        {/* Images Grid (Masonry Columns Layout) */}
-        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-6 [column-fill:_balance] space-y-6">
+        {/* Images Grid (Bespoke Lookbook Masonry Layout) */}
+        <div className="columns-1 sm:columns-2 lg:columns-3 xl:columns-4 gap-8 [column-fill:_balance] space-y-8">
           {filteredImages.map((img) => (
             <div 
               key={img.id}
               onClick={() => setLightboxImage(img)}
-              className="break-inside-avoid bg-ebony-card border border-stone-border/40 p-4 group cursor-pointer hover:border-gold/40 transition-all duration-500 flex flex-col rounded-2xl hover:shadow-[0_8px_25px_rgba(212,175,55,0.08)] mb-6"
+              className="break-inside-avoid group cursor-pointer flex flex-col mb-8 bg-ebony-card border border-stone-border/20 p-3"
             >
-              <div className="relative overflow-hidden rounded-xl border border-stone-border">
+              <div className="relative overflow-hidden aspect-auto border border-stone-border/20">
                 <img 
                   src={img.image} 
                   alt={img.title}
-                  className="w-full h-auto object-cover filter brightness-90 group-hover:brightness-100 group-hover:scale-110 transition-all duration-700"
+                  className="w-full h-auto object-cover filter brightness-[0.75] group-hover:brightness-95 group-hover:scale-[1.02] transition-all duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <div className="p-3 bg-ebony-card/90 border border-gold/30 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                    <Maximize2 className="w-5 h-5 text-gold animate-pulse" />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="p-3 bg-ebony-card border border-gold/30 rounded-none shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                    <Maximize2 className="w-4 h-4 text-gold" />
                   </div>
                 </div>
               </div>
               
               <div className="pt-4 pb-1 px-1 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="font-serif text-sm font-semibold text-ivory tracking-wide mb-1 group-hover:text-gold transition-colors duration-300">
+                  <h3 className="font-serif text-sm font-normal text-stone/90 tracking-wide mb-1.5 group-hover:text-gold transition-colors duration-300">
                     {img.title}
                   </h3>
-                  <p className="text-[11px] font-light text-stone leading-relaxed">
+                  <p className="text-[11px] font-light text-stone/50 leading-relaxed">
                     {img.description}
                   </p>
                 </div>
-                <span className="text-[9px] tracking-[0.2em] uppercase text-gold/60 mt-3 block font-medium">
+                <span className="text-[8px] tracking-[0.25em] uppercase text-gold/50 mt-4 block font-mono">
                   {img.category}
                 </span>
               </div>
@@ -141,29 +144,29 @@ const Gallery = () => {
 
         {/* Lightbox Modal */}
         {lightboxImage && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
             <button 
               onClick={() => setLightboxImage(null)}
-              className="absolute top-6 right-6 text-stone hover:text-gold transition-colors duration-300"
+              className="absolute top-6 right-6 text-stone/60 hover:text-gold transition-colors duration-300"
               aria-label="Close fullscreen view"
             >
-              <X className="w-8 h-8" />
+              <X className="w-6 h-6" />
             </button>
 
             <div className="max-w-4xl w-full max-h-[85vh] flex flex-col items-center">
-              <div className="border border-stone-border p-2 bg-ebony-card max-h-[70vh] overflow-hidden flex items-center justify-center">
+              <div className="border border-stone-border/30 p-2 bg-ebony-card max-h-[70vh] overflow-hidden flex items-center justify-center">
                 <img 
                   src={lightboxImage.image} 
                   alt={lightboxImage.title}
-                  className="max-w-full max-h-[68vh] object-contain border border-stone-border"
+                  className="max-w-full max-h-[68vh] object-contain border border-stone-border/20"
                 />
               </div>
 
               <div className="text-center mt-6 max-w-xl">
-                <h3 className="font-serif text-xl font-bold tracking-wider text-gold uppercase mb-2">
+                <h3 className="font-serif text-lg font-normal tracking-wider text-gold uppercase mb-2">
                   {lightboxImage.title}
                 </h3>
-                <p className="text-sm font-light text-stone-light leading-relaxed">
+                <p className="text-xs font-light text-stone/60 leading-relaxed">
                   {lightboxImage.description}
                 </p>
               </div>

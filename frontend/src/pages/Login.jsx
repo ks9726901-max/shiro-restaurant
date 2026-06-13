@@ -78,37 +78,35 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-ebony min-h-screen flex items-center justify-center px-6">
+    <div className="bg-ebony min-h-screen flex items-center justify-center px-6 relative">
       
       {/* Background Ambience decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(#2A2827_1px,transparent_1px)] [background-size:24px_24px] opacity-25" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gold/5 rounded-full filter blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-jade/5 rounded-full filter blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(#28292d_1px,transparent_1px)] [background-size:24px_24px] opacity-30" />
 
       {/* Login Box */}
-      <div className="relative w-full max-w-md bg-ebony-card border border-stone-border p-10 shadow-2xl z-10">
+      <div className="relative w-full max-w-sm bg-ebony-card border border-stone-border/30 p-10 shadow-[0_20px_50px_rgba(0,0,0,0.4)] z-10">
         
         {/* Title */}
-        <div className="text-center mb-8">
-          <span className="font-serif text-3xl font-bold tracking-[0.25em] text-gold">
+        <div className="text-center mb-10">
+          <span className="font-serif text-2xl font-normal tracking-[0.3em] text-gold">
             SHIRO
           </span>
-          <p className="text-[10px] tracking-[0.35em] text-stone uppercase mt-1">
+          <p className="text-[8px] tracking-[0.3em] text-stone/50 uppercase mt-2">
             Staff Portal Administration
           </p>
-          <div className="w-16 h-0.5 bg-gold mx-auto mt-4" />
+          <div className="w-10 h-[1px] bg-gold/30 mx-auto mt-4" />
         </div>
 
         {/* Notices */}
         {sessionExpiredMsg && (
-          <div className="mb-6 p-3 bg-gold/10 border border-gold/30 text-gold text-xs font-light text-center flex items-center justify-center space-x-2">
+          <div className="mb-6 p-3.5 bg-gold/5 border border-gold/20 text-gold text-xs font-light text-center flex items-center justify-center space-x-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>Session expired. Please log in again.</span>
           </div>
         )}
 
         {error && (
-          <div className="mb-6 p-3 bg-crimson/10 border border-crimson/30 text-crimson text-xs font-light flex items-center space-x-2">
+          <div className="mb-6 p-3.5 bg-crimson/5 border border-crimson/25 text-crimson-bright text-xs font-light flex items-center space-x-2">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -117,12 +115,12 @@ const Login = () => {
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+            <label htmlFor="username" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
               Username
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-stone">
-                <User className="w-4 h-4" />
+              <span className="absolute bottom-3.5 left-0 text-stone/40">
+                <User className="w-3.5 h-3.5" />
               </span>
               <input
                 type="text"
@@ -130,18 +128,18 @@ const Login = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Enter staff username"
-                className="w-full bg-ebony-light border border-stone-border py-2.5 pl-10 pr-4 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors duration-300"
+                className="w-full bg-transparent border-b border-stone-border/60 py-3 pl-7 pr-2 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors duration-300 rounded-none"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+            <label htmlFor="password" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
               Password
             </label>
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-stone">
-                <Lock className="w-4 h-4" />
+              <span className="absolute bottom-3.5 left-0 text-stone/40">
+                <Lock className="w-3.5 h-3.5" />
               </span>
               <input
                 type="password"
@@ -149,7 +147,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
-                className="w-full bg-ebony-light border border-stone-border py-2.5 pl-10 pr-4 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors duration-300"
+                className="w-full bg-transparent border-b border-stone-border/60 py-3 pl-7 pr-2 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors duration-300 rounded-none"
               />
             </div>
           </div>
@@ -157,15 +155,15 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 disabled:bg-stone/50 shadow-lg"
+            className="w-full py-3.5 bg-gold text-ebony font-sans text-xs font-medium tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 disabled:bg-stone-border/50 disabled:text-stone/40 shadow-md cursor-pointer mt-2"
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
 
         {/* Back Link */}
-        <div className="text-center mt-6">
-          <a href="/" className="text-[10px] tracking-widest text-stone hover:text-gold uppercase transition-colors">
+        <div className="text-center mt-8">
+          <a href="/" className="text-[9px] tracking-widest text-stone/40 hover:text-gold uppercase transition-colors">
             ← Back to Customer Site
           </a>
         </div>

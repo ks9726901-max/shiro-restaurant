@@ -37,23 +37,23 @@ const Navbar = () => {
     <nav 
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-ebony/95 backdrop-blur-md border-b border-stone-border py-4 shadow-xl' 
+          ? 'bg-ebony/95 backdrop-blur-md border-b border-stone-border/30 py-4' 
           : 'bg-transparent py-6'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 flex justify-between items-center">
         {/* Brand Logo */}
         <Link to="/" className="flex flex-col items-center group">
-          <span className="font-serif text-3xl font-semibold tracking-[0.25em] text-gold group-hover:text-gold-hover transition-colors duration-300">
+          <span className="font-serif text-2xl font-normal tracking-[0.3em] text-gold group-hover:text-gold-hover transition-colors duration-300">
             SHIRO
           </span>
-          <span className="text-[9px] tracking-[0.4em] text-stone font-sans uppercase mt-0.5 group-hover:text-gold transition-colors duration-300">
+          <span className="text-[8px] tracking-[0.45em] text-stone/70 font-sans uppercase mt-0.5 group-hover:text-gold transition-colors duration-300">
             Bengaluru
           </span>
         </Link>
 
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-10">
+        <div className="hidden md:flex items-center space-x-8">
           <div className="flex space-x-8">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
@@ -61,43 +61,39 @@ const Navbar = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`relative font-sans text-xs tracking-[0.2em] uppercase transition-all duration-300 py-1 group ${
+                  className={`relative font-sans text-[10px] tracking-[0.25em] uppercase transition-all duration-300 py-1 group ${
                     isActive
-                      ? 'text-gold font-bold text-glow'
-                      : 'text-stone-light hover:text-gold-hover'
+                      ? 'text-gold font-medium'
+                      : 'text-stone/70 hover:text-gold-hover'
                   }`}
                 >
                   <span>{link.name}</span>
                   <span 
-                    className={`absolute bottom-0 left-0 h-[2px] bg-gradient-to-r from-gold via-amber to-gold transition-all duration-500 origin-left ${
+                    className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[1px] bg-gold transition-all duration-300 origin-center ${
                       isActive ? 'w-full scale-x-100' : 'w-0 scale-x-0 group-hover:w-full group-hover:scale-x-100'
                     }`}
                   />
-                  {isActive && (
-                    <span className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-burgundy rounded-full animate-pulse shadow-[0_0_8px_#6D071A]" />
-                  )}
                 </Link>
               );
             })}
           </div>
  
-          <div className="flex items-center space-x-6 border-l border-stone-border pl-8">
+          <div className="flex items-center space-x-6 border-l border-stone-border/40 pl-8">
             {/* Direct CTA */}
             <Link
               to="/reservation"
-              className="relative px-6 py-2.5 overflow-hidden group rounded-lg bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-[11px] font-bold uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_20px_rgba(212,175,55,0.45)] transition-all duration-300"
+              className="relative px-5 py-2 overflow-hidden border border-gold/40 hover:border-gold bg-transparent text-gold hover:text-ebony hover:bg-gold font-sans text-[10px] tracking-widest uppercase transition-all duration-300"
             >
               <span className="relative z-10">Book Table</span>
-              <span className="absolute inset-0 w-full h-full bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out" />
             </Link>
  
             {/* Subtle Staff Link */}
             <Link
               to="/login"
               title="Staff Dashboard"
-              className="text-stone hover:text-gold transition-colors duration-300 hover:scale-110"
+              className="text-stone/60 hover:text-gold transition-colors duration-300 hover:scale-105"
             >
-              <ShieldAlert className="w-5 h-5" />
+              <ShieldAlert className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -106,36 +102,36 @@ const Navbar = () => {
         <div className="flex items-center space-x-4 md:hidden">
           <Link
             to="/login"
-            className="text-stone hover:text-gold transition-colors"
+            className="text-stone/60 hover:text-gold transition-colors"
           >
-            <ShieldAlert className="w-5 h-5" />
+            <ShieldAlert className="w-4 h-4" />
           </Link>
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="text-gold hover:text-gold-hover focus:outline-none"
             aria-label="Toggle Menu"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
       </div>
 
       {/* Mobile Slideout Menu */}
       <div
-        className={`fixed inset-y-0 right-0 w-80 bg-ebony-card border-l border-stone-border z-40 p-8 transform transition-transform duration-500 shadow-2xl md:hidden ${
+        className={`fixed inset-y-0 right-0 w-72 bg-ebony-card border-l border-stone-border/40 z-40 p-8 transform transition-transform duration-500 shadow-2xl md:hidden ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         <div className="flex justify-end mb-8">
           <button onClick={() => setIsOpen(false)} className="text-gold">
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
         <div className="flex flex-col space-y-6">
-          <div className="border-b border-stone-border pb-4 mb-4">
-            <span className="font-serif text-2xl tracking-[0.2em] text-gold">SHIRO</span>
-            <p className="text-[10px] tracking-widest text-stone uppercase mt-1">UB City, Bengaluru</p>
+          <div className="border-b border-stone-border/40 pb-4 mb-4">
+            <span className="font-serif text-xl tracking-[0.25em] text-gold">SHIRO</span>
+            <p className="text-[8px] tracking-widest text-stone/60 uppercase mt-1">UB City, Bengaluru</p>
           </div>
 
           {navLinks.map((link) => (
@@ -143,10 +139,10 @@ const Navbar = () => {
               key={link.path}
               to={link.path}
               className={({ isActive }) =>
-                `text-base tracking-widest uppercase pb-1 border-b ${
+                `text-xs tracking-widest uppercase pb-1 border-b ${
                   isActive
-                    ? 'text-gold border-gold font-medium'
-                    : 'text-stone border-transparent'
+                    ? 'text-gold border-gold/40 font-medium'
+                    : 'text-stone/70 border-transparent'
                 }`
               }
               onClick={() => setIsOpen(false)}
@@ -157,7 +153,7 @@ const Navbar = () => {
 
           <Link
             to="/reservation"
-            className="mt-8 px-6 py-3 text-center bg-gold text-ebony font-sans text-xs uppercase tracking-widest hover:bg-gold-hover transition-all duration-300 font-semibold"
+            className="mt-8 px-6 py-3 text-center border border-gold text-gold font-sans text-xs uppercase tracking-widest hover:bg-gold hover:text-ebony transition-all duration-300 font-medium"
             onClick={() => setIsOpen(false)}
           >
             Book Table

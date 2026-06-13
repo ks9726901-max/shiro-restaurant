@@ -191,20 +191,20 @@ const DashboardReservations = () => {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-stone">
       {/* Title */}
-      <div>
-        <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
+      <div className="border-b border-stone-border/30 pb-6">
+        <h1 className="font-serif text-2xl font-normal uppercase tracking-wider text-white">
           Reservations Manager
         </h1>
-        <p className="text-xs font-light text-stone mt-1">
+        <p className="text-[11px] font-light text-stone/50 mt-1">
           Review, approve, cancel, or search guest dining bookings.
         </p>
       </div>
 
       {/* Offline Status Warning */}
       {error && (
-        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+        <div className="p-4 bg-amber/5 border border-amber/20 text-amber text-xs flex items-center space-x-2.5">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -212,19 +212,19 @@ const DashboardReservations = () => {
 
       {/* Success Notification Alert */}
       {success && (
-        <div className="p-3.5 bg-green-500/10 border border-green-500/20 text-green-500 text-xs flex items-center space-x-2.5">
+        <div className="p-4 bg-gold/5 border border-gold/20 text-gold text-xs flex items-center space-x-2.5">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{success}</span>
         </div>
       )}
 
       {/* Filters Form */}
-      <div className="bg-ebony-card border border-stone-border/40 p-6">
+      <div className="bg-ebony-card border border-stone-border/30 p-6">
         <form onSubmit={handleSearchSubmit} className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
           
           {/* Keyword Search */}
           <div>
-            <label htmlFor="search" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+            <label htmlFor="search" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-2 font-medium">
               Search Guest
             </label>
             <div className="relative">
@@ -234,35 +234,35 @@ const DashboardReservations = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Name, email, or phone..."
-                className="w-full bg-ebony-light border border-stone-border py-2 px-3 pl-9 text-xs font-light text-white placeholder-stone/60 focus:outline-none focus:border-gold transition-colors"
+                className="w-full bg-transparent border-b border-stone-border py-2 pl-7 pr-3 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors"
               />
-              <Search className="w-3.5 h-3.5 text-stone absolute left-3 top-3" />
+              <Search className="w-3.5 h-3.5 text-stone/40 absolute left-0 bottom-2.5" />
             </div>
           </div>
 
           {/* Status Filter */}
           <div>
-            <label htmlFor="status" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+            <label htmlFor="status" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-2 font-medium">
               Filter Status
             </label>
             <select
               id="status"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs font-light text-stone-light focus:outline-none focus:border-gold rounded-none"
+              className="w-full bg-transparent border-b border-stone-border py-2 px-1 text-xs font-light text-stone/50 focus:outline-none focus:border-gold rounded-none appearance-none cursor-pointer"
             >
-              <option value="">All Statuses</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Confirmed</option>
-              <option value="rejected">Rejected</option>
-              <option value="completed">Completed</option>
-              <option value="cancelled">Cancelled</option>
+              <option value="" className="bg-ebony-card text-stone/40">All Statuses</option>
+              <option value="pending" className="bg-ebony-card text-stone">Pending</option>
+              <option value="confirmed" className="bg-ebony-card text-stone">Confirmed</option>
+              <option value="rejected" className="bg-ebony-card text-stone">Rejected</option>
+              <option value="completed" className="bg-ebony-card text-stone">Completed</option>
+              <option value="cancelled" className="bg-ebony-card text-stone">Cancelled</option>
             </select>
           </div>
 
           {/* Date Filter */}
           <div>
-            <label htmlFor="date" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+            <label htmlFor="date" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-2 font-medium">
               Filter Date
             </label>
             <input
@@ -270,14 +270,14 @@ const DashboardReservations = () => {
               id="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs font-light text-white focus:outline-none focus:border-gold"
+              className="w-full bg-transparent border-b border-stone-border py-2 px-1 text-xs font-light text-white focus:outline-none focus:border-gold rounded-none"
             />
           </div>
 
           {/* Search Action Button */}
           <button
             type="submit"
-            className="w-full py-2 bg-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:bg-gold-hover transition-all duration-300"
+            className="w-full py-2 bg-gold text-ebony font-sans text-xs font-medium tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 cursor-pointer"
           >
             Apply Search
           </button>
@@ -286,29 +286,29 @@ const DashboardReservations = () => {
       </div>
 
       {/* Reservations Table */}
-      <div className="bg-ebony-card border border-stone-border/40 p-8">
+      <div className="bg-ebony-card border border-stone-border/30 p-8">
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
+            <div className="animate-spin rounded-full h-8 w-8 border-t border-b border-gold" />
           </div>
         ) : !Array.isArray(reservations) || reservations.length === 0 ? (
-          <div className="text-center py-12 text-stone font-light text-xs border border-dashed border-stone-border/20">
+          <div className="text-center py-12 text-stone/40 font-light text-xs border border-dashed border-stone-border/20">
             No reservations match the search criteria.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
               <thead>
-                <tr className="border-b border-stone-border/60 text-stone uppercase text-[10px] tracking-widest">
+                <tr className="border-b border-stone-border/40 text-stone/45 uppercase text-[9px] tracking-widest">
                   <th className="pb-3 w-8"></th>
                   <th className="pb-3 font-medium">Guest Details</th>
                   <th className="pb-3 font-medium">Date & Time</th>
                   <th className="pb-3 font-medium">Size</th>
                   <th className="pb-3 font-medium">Status</th>
-                  <th className="pb-3 font-medium text-right">Moderator Panel</th>
+                  <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-border/30">
+              <tbody className="divide-y divide-stone-border/20">
                 {(Array.isArray(reservations) ? reservations : []).map((res) => {
                   const isNew = highlightedIds[res.id] && (Date.now() - highlightedIds[res.id] < 30000);
                   const isCreatedRecently = res.created_at && (Date.now() - new Date(res.created_at).getTime() < 30000);
@@ -316,45 +316,45 @@ const DashboardReservations = () => {
                   
                   return (
                     <React.Fragment key={res.id}>
-                      <tr className={`text-stone-light hover:bg-ebony-light/40 transition-colors ${
-                        expandedRow === res.id ? 'bg-ebony-light/25' : ''
+                      <tr className={`text-stone/70 hover:bg-ebony-light/30 transition-colors ${
+                        expandedRow === res.id ? 'bg-ebony-light/10' : ''
                       } ${isHighlighted ? 'animate-reservation-highlight-green' : ''}`}>
                       <td className="py-4">
                         <button 
                           onClick={() => toggleExpandRow(res.id)}
-                          className="text-gold hover:text-gold-hover"
+                          className="text-gold hover:text-gold-hover transition-colors p-1"
                           title="View special requests"
                         >
-                          {expandedRow === res.id ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          {expandedRow === res.id ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                         </button>
                       </td>
                       <td className="py-4">
-                        <p className="font-semibold text-white">{res.customer_name}</p>
-                        <p className="text-[10px] text-stone mt-0.5">{res.customer_email} | {res.customer_phone}</p>
+                        <p className="font-semibold text-stone/90">{res.customer_name}</p>
+                        <p className="text-[10px] text-stone/40 mt-1 font-mono">{res.customer_email} | {res.customer_phone}</p>
                       </td>
                       <td className="py-4 font-serif text-gold font-medium">
-                        <p>{res.reservation_date}</p>
-                        <p className="text-[10px] text-stone-light mt-0.5">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</p>
+                        <p className="text-stone/90">{res.reservation_date}</p>
+                        <p className="text-[10px] text-stone/40 mt-1 font-sans">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</p>
                       </td>
-                      <td className="py-4 font-semibold text-white">{res.guest_count} persons</td>
+                      <td className="py-4 font-medium text-stone/80">{res.guest_count} persons</td>
                       <td className="py-4">
-                        <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] tracking-widest ${
+                        <span className={`px-2 py-0.5 rounded-none font-medium uppercase text-[8px] tracking-widest ${
                           res.status === 'confirmed' 
-                            ? 'bg-gold/10 text-gold border border-gold/30' 
+                            ? 'bg-gold/5 text-gold border border-gold/30' 
                             : res.status === 'rejected' || res.status === 'cancelled'
-                            ? 'bg-burgundy/15 text-crimson-bright border border-burgundy/30'
+                            ? 'bg-crimson/5 text-crimson-bright border border-crimson/30'
                             : res.status === 'completed'
-                            ? 'bg-jade/20 text-jade-light border border-jade/30'
-                            : 'bg-amber/10 text-amber border border-amber/30 animate-pulse'
+                            ? 'bg-jade/10 text-stone/80 border border-stone-border/50'
+                            : 'bg-amber/5 text-amber border border-amber/30 animate-pulse'
                         }`}>
                           {res.status}
                         </span>
                         {res.email_delivery_status && (
-                          <div className="mt-1.5 flex items-center space-x-1 text-[9px] tracking-wider text-stone font-mono">
-                            <span className={`inline-block w-1.5 h-1.5 rounded-full ${
-                              res.email_delivery_status === 'sent' ? 'bg-green-400 animate-pulse' : 'bg-red-500'
+                          <div className="mt-1.5 flex items-center space-x-1 text-[8px] tracking-wider text-stone/40 font-mono">
+                            <span className={`inline-block w-1 h-1 rounded-full ${
+                              res.email_delivery_status === 'sent' ? 'bg-green-400' : 'bg-crimson-bright'
                             }`} />
-                            <span className="uppercase">{res.email_delivery_status === 'sent' ? 'sent' : 'failed'}</span>
+                            <span className="uppercase">Email: {res.email_delivery_status === 'sent' ? 'sent' : 'failed'}</span>
                           </div>
                         )}
                       </td>
@@ -364,13 +364,13 @@ const DashboardReservations = () => {
                             <>
                               <button
                                 onClick={() => handleStatusUpdate(res.id, 'confirmed')}
-                                className="px-2.5 py-1 border border-green-500/40 text-green-400 hover:bg-green-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
+                                className="px-2.5 py-1 border border-gold/45 text-gold hover:bg-gold hover:text-ebony transition-all uppercase text-[8px] font-medium tracking-wider cursor-pointer"
                               >
                                 Approve
                               </button>
                               <button
                                 onClick={() => handleStatusUpdate(res.id, 'rejected')}
-                                className="px-2.5 py-1 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
+                                className="px-2.5 py-1 border border-stone-border text-stone/60 hover:border-crimson hover:text-crimson-bright transition-all uppercase text-[8px] font-medium tracking-wider cursor-pointer"
                               >
                                 Reject
                               </button>
@@ -378,16 +378,16 @@ const DashboardReservations = () => {
                           ) : res.status === 'confirmed' ? (
                             <button
                               onClick={() => handleStatusUpdate(res.id, 'completed')}
-                              className="px-2.5 py-1 border border-blue-500/40 text-blue-400 hover:bg-blue-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer mr-2"
+                              className="px-2.5 py-1 border border-stone-border text-stone/60 hover:border-gold hover:text-ebony transition-all uppercase text-[8px] font-medium tracking-wider cursor-pointer mr-2"
                             >
                               Complete
                             </button>
                           ) : (
-                            <span className="text-stone text-[10px] uppercase italic mr-2">Processed</span>
+                            <span className="text-stone/40 text-[9px] uppercase italic mr-2">Processed</span>
                           )}
                           <button
                             onClick={() => handleDelete(res.id)}
-                            className="p-1 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-colors cursor-pointer"
+                            className="p-1.5 border border-stone-border/60 text-stone/50 hover:border-crimson hover:text-crimson-bright transition-colors cursor-pointer"
                             title="Delete booking"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
@@ -398,13 +398,13 @@ const DashboardReservations = () => {
 
                     {/* Expandable Special Requests Row */}
                     {expandedRow === res.id && (
-                      <tr className="bg-ebony-light/20">
-                        <td colSpan="6" className="py-4 px-8 border-l-2 border-gold">
-                          <div className="flex items-start space-x-2">
-                            <AlertCircle className="w-4 h-4 text-gold shrink-0 mt-0.5" />
+                      <tr className="bg-ebony-light/10">
+                        <td colSpan="6" className="py-4 px-8 border-l border-gold">
+                          <div className="flex items-start space-x-3">
+                            <AlertCircle className="w-3.5 h-3.5 text-gold/60 shrink-0 mt-0.5" />
                             <div>
-                              <p className="font-semibold text-stone-light uppercase tracking-widest text-[9px] mb-1">Special Requests</p>
-                              <p className="text-xs font-light leading-relaxed italic text-stone">
+                              <p className="font-medium text-stone/80 uppercase tracking-widest text-[8px] mb-1">Special Requests</p>
+                              <p className="text-xs font-light leading-relaxed italic text-stone/50">
                                 {res.special_requests || 'No special requests provided by guest.'}
                               </p>
                             </div>

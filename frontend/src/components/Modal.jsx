@@ -25,24 +25,24 @@ const Modal = ({ isOpen, onClose, title, children }) => {
       />
 
       {/* Modal Dialog */}
-      <div className="relative w-full max-w-lg bg-ebony-card border border-stone-border p-8 rounded-none shadow-2xl z-10 max-h-[90vh] overflow-y-auto scrollbar-luxury transform scale-100 transition-all duration-300">
+      <div className="relative w-full max-w-lg bg-ebony-card border border-stone-border/60 p-8 rounded-none shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-10 max-h-[90vh] overflow-y-auto scrollbar-luxury transform scale-100 transition-all duration-300">
         
         {/* Header */}
-        <div className="flex justify-between items-center border-b border-stone-border pb-4 mb-6">
-          <h3 className="font-serif text-lg font-bold tracking-wider text-gold uppercase">
+        <div className="flex justify-between items-center border-b border-stone-border/40 pb-4 mb-6">
+          <h3 className="font-serif text-xs font-semibold tracking-[0.25em] text-gold uppercase">
             {title}
           </h3>
           <button 
             onClick={onClose} 
-            className="text-stone hover:text-gold transition-colors duration-300"
+            className="text-stone/60 hover:text-gold transition-colors duration-300 p-1 hover:bg-stone-border/20"
             aria-label="Close dialog"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="text-sm font-light text-stone-light">
+        <div className="text-xs font-light text-stone/80 leading-relaxed">
           {children}
         </div>
       </div>

@@ -185,30 +185,30 @@ const DashboardHome = () => {
   const totalGuestsToday = todayBookings.reduce((sum, res) => sum + parseInt(res.guest_count || 0, 10), 0);
 
   const statCards = [
-    { label: "Today's Reservations", count: todayReservationsCount, icon: CalendarDays, color: 'text-gold border-gold/25 bg-gold/5' },
-    { label: 'Pending Reservations', count: summary.pendingReservations, icon: Clock, color: 'text-amber-500 border-amber-500/25 bg-amber-500/5' },
-    { label: 'Confirmed Reservations', count: summary.confirmedReservations, icon: CheckCircle2, color: 'text-green-500 border-green-500/25 bg-green-500/5' },
-    { label: 'Total Guests Today', count: totalGuestsToday, icon: Utensils, color: 'text-jade-light border-jade-light/25 bg-jade-light/5' }
+    { label: "Today's Bookings", count: todayReservationsCount, icon: CalendarDays, color: 'border-stone-border/40 text-stone/50' },
+    { label: 'Pending Requests', count: summary.pendingReservations, icon: Clock, color: 'border-stone-border/40 text-amber' },
+    { label: 'Confirmed Bookings', count: summary.confirmedReservations, icon: CheckCircle2, color: 'border-stone-border/40 text-gold' },
+    { label: 'Total Guests Today', count: totalGuestsToday, icon: Utensils, color: 'border-stone-border/40 text-stone/70' }
   ];
 
   return (
     <div className="space-y-10">
       
       {/* Welcome Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-stone-border/30 pb-6">
         <div>
-          <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
-            Overview Dashboard
+          <h1 className="font-serif text-2xl font-normal uppercase tracking-wider text-white">
+            Operational Overview
           </h1>
-          <p className="text-xs font-light text-stone mt-1">
-            Welcome back. Here is the operational summary for Shiro Bengaluru.
+          <p className="text-[11px] font-light text-stone/50 mt-1">
+            Real-time operational summaries and table allocations for Shiro Bengaluru.
           </p>
         </div>
       </div>
 
       {/* Offline Status Warning */}
       {error && (
-        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+        <div className="p-4 bg-amber/5 border border-amber/20 text-amber text-xs flex items-center space-x-2.5">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -216,7 +216,7 @@ const DashboardHome = () => {
 
       {/* Success Notification Alert */}
       {success && (
-        <div className="p-3.5 bg-green-500/10 border border-green-500/20 text-green-500 text-xs flex items-center space-x-2.5">
+        <div className="p-4 bg-gold/5 border border-gold/20 text-gold text-xs flex items-center space-x-2.5">
           <CheckCircle2 className="w-4 h-4 shrink-0" />
           <span>{success}</span>
         </div>
@@ -226,51 +226,51 @@ const DashboardHome = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {(Array.isArray(statCards) ? statCards : []).map((card, idx) => (
           <div key={idx} className={`p-6 border bg-ebony-card flex items-center justify-between ${card.color}`}>
-            <div>
-              <p className="text-[10px] tracking-widest uppercase text-stone-light">{card.label}</p>
-              <h3 className="font-serif text-3xl font-bold mt-2 text-white">{card.count}</h3>
+            <div className="space-y-2">
+              <p className="text-[9px] tracking-widest uppercase text-stone/40">{card.label}</p>
+              <h3 className="font-serif text-3xl font-normal text-white">{card.count}</h3>
             </div>
-            <card.icon className="w-10 h-10 stroke-[1.25]" />
+            <card.icon className="w-8 h-8 stroke-[1.25] text-gold/60" />
           </div>
         ))}
       </div>
 
       {/* Today's Bookings Split */}
-      <div className="bg-ebony-card border border-stone-border/40 p-8">
-        <div className="flex justify-between items-center border-b border-stone-border/30 pb-4 mb-6">
-          <div className="flex items-center space-x-2.5">
-            <CalendarDays className="w-5 h-5 text-gold" />
-            <h2 className="font-serif text-lg font-bold text-white uppercase tracking-wider">
+      <div className="bg-ebony-card border border-stone-border/30 p-8">
+        <div className="flex justify-between items-center border-b border-stone-border/30 pb-4 mb-8">
+          <div className="flex items-center space-x-3">
+            <CalendarDays className="w-4 h-4 text-gold/60" />
+            <h2 className="font-serif text-base font-normal text-white uppercase tracking-wider">
               Today's Bookings
             </h2>
           </div>
-          <span className="text-[10px] tracking-widest text-gold font-sans bg-gold/10 px-3 py-1 font-semibold">
+          <span className="text-[9px] tracking-widest text-gold font-sans border border-gold/30 px-3 py-1 font-semibold">
             {todayStr}
           </span>
         </div>
 
         {loading ? (
           <div className="flex justify-center py-10">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
+            <div className="animate-spin rounded-full h-8 w-8 border-t border-b border-gold" />
           </div>
         ) : !Array.isArray(todayBookings) || todayBookings.length === 0 ? (
-          <div className="text-center py-12 text-stone font-light text-xs border border-dashed border-stone-border/20">
+          <div className="text-center py-12 text-stone/40 font-light text-xs border border-dashed border-stone-border/20">
             No table reservations scheduled for today.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
               <thead>
-                <tr className="border-b border-stone-border/60 text-stone uppercase text-[10px] tracking-widest">
+                <tr className="border-b border-stone-border/40 text-stone/45 uppercase text-[9px] tracking-widest">
                   <th className="pb-3 font-medium">Guest</th>
                   <th className="pb-3 font-medium">Phone</th>
                   <th className="pb-3 font-medium">Time Slot</th>
                   <th className="pb-3 font-medium">Guests</th>
                   <th className="pb-3 font-medium">Status</th>
-                  <th className="pb-3 font-medium text-right">Moderator</th>
+                  <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-border/30">
+              <tbody className="divide-y divide-stone-border/20">
                 {(Array.isArray(todayBookings) ? todayBookings : []).map((res) => {
                   const isNew = highlightedIds[res.id] && (Date.now() - highlightedIds[res.id] < 30000);
                   const isCreatedRecently = res.created_at && (Date.now() - new Date(res.created_at).getTime() < 30000);
@@ -279,56 +279,56 @@ const DashboardHome = () => {
                   return (
                     <tr 
                       key={res.id} 
-                      className={`text-stone-light hover:bg-ebony-light/50 transition-colors ${
+                      className={`text-stone/70 hover:bg-ebony-light/30 transition-colors ${
                         isHighlighted ? 'animate-reservation-highlight-green' : ''
                       }`}
                     >
-                      <td className="py-4 font-semibold text-white">{res.customer_name}</td>
-                    <td className="py-4">{res.customer_phone}</td>
-                    <td className="py-4 font-serif text-gold">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</td>
-                    <td className="py-4">{res.guest_count} persons</td>
-                    <td className="py-4">
-                      <span className={`px-2 py-0.5 rounded font-bold uppercase text-[9px] tracking-widest ${
-                        res.status === 'confirmed' 
-                          ? 'bg-gold/10 text-gold border border-gold/30' 
-                          : res.status === 'rejected' || res.status === 'cancelled'
-                          ? 'bg-burgundy/15 text-crimson-bright border border-burgundy/30'
-                          : res.status === 'completed'
-                          ? 'bg-jade/20 text-jade-light border border-jade/30'
-                          : 'bg-amber/10 text-amber border border-amber/30 animate-pulse'
-                      }`}>
-                        {res.status}
-                      </span>
-                    </td>
-                    <td className="py-4 text-right">
-                      {res.status === 'pending' ? (
-                        <div className="flex justify-end space-x-2">
+                      <td className="py-4 font-medium text-stone/90">{res.customer_name}</td>
+                      <td className="py-4 font-mono text-[11px] text-stone/50">{res.customer_phone}</td>
+                      <td className="py-4 font-serif text-gold text-sm">{res.reservation_time ? res.reservation_time.slice(0, 5) : 'N/A'}</td>
+                      <td className="py-4 text-stone/80">{res.guest_count} persons</td>
+                      <td className="py-4">
+                        <span className={`px-2 py-0.5 rounded-none font-medium uppercase text-[8px] tracking-widest ${
+                          res.status === 'confirmed' 
+                            ? 'bg-gold/5 text-gold border border-gold/30' 
+                            : res.status === 'rejected' || res.status === 'cancelled'
+                            ? 'bg-crimson/5 text-crimson-bright border border-crimson/30'
+                            : res.status === 'completed'
+                            ? 'bg-jade/10 text-stone/80 border border-stone-border/50'
+                            : 'bg-amber/5 text-amber border border-amber/30 animate-pulse'
+                        }`}>
+                          {res.status}
+                        </span>
+                      </td>
+                      <td className="py-4 text-right">
+                        {res.status === 'pending' ? (
+                          <div className="flex justify-end space-x-2">
+                            <button
+                              onClick={() => handleStatusChange(res.id, 'confirmed')}
+                              className="px-2.5 py-1 border border-gold/40 text-gold hover:bg-gold hover:text-ebony transition-all uppercase text-[8px] tracking-wider cursor-pointer"
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() => handleStatusChange(res.id, 'rejected')}
+                              className="px-2.5 py-1 border border-stone-border text-stone/60 hover:border-crimson hover:text-crimson-bright transition-all uppercase text-[8px] tracking-wider cursor-pointer"
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        ) : res.status === 'confirmed' ? (
                           <button
-                            onClick={() => handleStatusChange(res.id, 'confirmed')}
-                            className="px-3 py-1 border border-green-500/40 text-green-400 hover:bg-green-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
+                            onClick={() => handleStatusChange(res.id, 'completed')}
+                            className="px-2.5 py-1 border border-stone-border text-stone/60 hover:border-gold hover:text-ebony transition-all uppercase text-[8px] tracking-wider cursor-pointer"
                           >
-                            Approve
+                            Complete
                           </button>
-                          <button
-                            onClick={() => handleStatusChange(res.id, 'rejected')}
-                            className="px-3 py-1 border border-red-500/40 text-red-400 hover:bg-red-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      ) : res.status === 'confirmed' ? (
-                        <button
-                          onClick={() => handleStatusChange(res.id, 'completed')}
-                          className="px-3 py-1 border border-blue-500/40 text-blue-400 hover:bg-blue-500 hover:text-white transition-colors uppercase text-[9px] font-bold tracking-wider cursor-pointer"
-                        >
-                          Complete
-                        </button>
-                      ) : (
-                        <span className="text-stone text-[10px] uppercase italic">Processed</span>
-                      )}
-                    </td>
-                  </tr>
-                );
+                        ) : (
+                          <span className="text-stone/40 text-[9px] uppercase italic">Processed</span>
+                        )}
+                      </td>
+                    </tr>
+                  );
                 })}
               </tbody>
             </table>

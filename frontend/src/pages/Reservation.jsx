@@ -135,67 +135,67 @@ const Reservation = () => {
   };
 
   return (
-    <div className="bg-ebony min-h-screen pt-28 pb-20 text-stone">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="bg-ebony min-h-screen pt-32 pb-24 text-stone">
+      <div className="max-w-5xl mx-auto px-6">
         
         {/* Header Title */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <span className="text-[10px] tracking-[0.3em] text-gold uppercase font-semibold">Table Reservations</span>
-          <h1 className="text-4xl md:text-5xl font-bold uppercase tracking-wider mt-2 mb-4">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <span className="text-[9px] tracking-[0.4em] text-gold uppercase font-medium block mb-3">Table Reservations</span>
+          <h1 className="text-4xl md:text-5xl font-serif font-light text-white tracking-wide mt-2 mb-4">
             Book A Table
           </h1>
-          <div className="w-20 h-0.5 bg-gold mx-auto mb-4" />
-          <p className="text-xs font-light text-stone-light">
-            Due to our high popularity, we recommend booking 24 hours in advance to secure preferred tables.
+          <div className="w-12 h-[1px] bg-gold/40 mx-auto mb-4" />
+          <p className="text-xs font-light text-stone/60 leading-relaxed">
+            Due to our high popularity, we recommend booking in advance. For special celebrations or customized teppanyaki bookings, please notify us below.
           </p>
         </div>
 
         {/* Main Grid: Form & Info */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* Booking Guidelines / Info Panel */}
-          <div className="md:col-span-1 bg-ebony-card border border-stone-border/40 p-6 md:p-8 flex flex-col space-y-6 rounded-2xl hover:border-gold/30 transition-all duration-500 shadow-xl">
-            <h3 className="font-serif text-lg font-semibold text-gold uppercase tracking-wider">
+          {/* Booking Guidelines / Info Panel (Brochure Style) */}
+          <div className="lg:col-span-4 bg-ebony-card border border-stone-border/30 p-8 flex flex-col space-y-8">
+            <h3 className="font-serif text-xs font-semibold text-gold uppercase tracking-[0.25em]">
               Dining Policies
             </h3>
             
-            <div className="space-y-4 text-xs font-light leading-relaxed">
-              <div className="border-l-2 border-gold/40 pl-4 py-1">
-                <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Confirmation</p>
-                <p>All online bookings are received as 'pending' and are confirmed via email/SMS by our host within 30 minutes.</p>
+            <div className="space-y-6 text-xs font-light leading-relaxed text-stone/70">
+              <div className="border-l border-gold/40 pl-4 py-0.5">
+                <p className="font-medium text-stone/90 uppercase tracking-widest text-[9px] mb-1">Confirmation</p>
+                <p className="text-stone/60">All online bookings are received as pending and confirmed by our host via SMS/email within 30 minutes.</p>
               </div>
 
-              <div className="border-l-2 border-burgundy/40 pl-4 py-1">
-                <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Dress Code</p>
-                <p>Smart Casuals. Sleeveless shirts, open sandals (men), and active sportswear are discouraged.</p>
+              <div className="border-l border-gold/40 pl-4 py-0.5">
+                <p className="font-medium text-stone/90 uppercase tracking-widest text-[9px] mb-1">Dress Code</p>
+                <p className="text-stone/60">Smart casual. Sleeveless shirts, open sandals (men), and active athletic apparel are discouraged.</p>
               </div>
 
-              <div className="border-l-2 border-amber/40 pl-4 py-1">
-                <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Grace Period</p>
-                <p>Reservations are held for a maximum of 15 minutes past the scheduled time before being released to walk-in guests.</p>
+              <div className="border-l border-gold/40 pl-4 py-0.5">
+                <p className="font-medium text-stone/90 uppercase tracking-widest text-[9px] mb-1">Grace Period</p>
+                <p className="text-stone/60">Reservations are held for 15 minutes past the scheduled time before releasing the table to walk-ins.</p>
               </div>
 
-              <div className="border-l-2 border-stone-border pl-4 py-1">
-                <p className="font-semibold text-stone-light uppercase tracking-wider text-[10px] mb-1">Large Parties</p>
-                <p>For bookings exceeding 10 guests, please contact our events team at +91 80 4173 8888.</p>
+              <div className="border-l border-gold/40 pl-4 py-0.5">
+                <p className="font-medium text-stone/90 uppercase tracking-widest text-[9px] mb-1">Large Parties</p>
+                <p className="text-stone/60">For bookings exceeding 10 guests, please contact our guest relation manager directly at +91 80 4173 8888.</p>
               </div>
             </div>
           </div>
 
-          {/* Reservation Form */}
-          <div className="md:col-span-2 bg-ebony-card border border-stone-border/40 p-6 md:p-8 rounded-2xl hover:border-gold/30 transition-all duration-500 shadow-xl">
-            <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Reservation Form (Underline Only Inputs) */}
+          <div className="lg:col-span-8 bg-ebony-card border border-stone-border/30 p-8 md:p-10">
+            <form onSubmit={handleSubmit} className="space-y-8">
               
               {error && (
-                <div className="p-4 bg-crimson/10 border border-crimson/30 text-crimson text-xs font-light rounded-xl">
+                <div className="p-4 bg-crimson/10 border border-crimson/30 text-crimson text-xs font-light">
                   {error}
                 </div>
               )}
 
               {/* Guest Details */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div>
-                  <label htmlFor="customer_name" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+                  <label htmlFor="customer_name" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
                     Full Name <span className="text-gold">*</span>
                   </label>
                   <input
@@ -206,12 +206,12 @@ const Reservation = () => {
                     value={formData.customer_name}
                     onChange={handleInputChange}
                     placeholder="e.g. Vikram Malhotra"
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
+                    className="w-full bg-transparent border-b border-stone-border/60 py-2.5 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors duration-300 rounded-none"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="customer_phone" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+                  <label htmlFor="customer_phone" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
                     Phone Number <span className="text-gold">*</span>
                   </label>
                   <input
@@ -222,13 +222,13 @@ const Reservation = () => {
                     value={formData.customer_phone}
                     onChange={handleInputChange}
                     placeholder="e.g. +91 98765 43210"
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
+                    className="w-full bg-transparent border-b border-stone-border/60 py-2.5 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors duration-300 rounded-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="customer_email" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+                <label htmlFor="customer_email" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
                   Email Address <span className="text-gold">*</span>
                 </label>
                 <input
@@ -239,32 +239,30 @@ const Reservation = () => {
                   value={formData.customer_email}
                   onChange={handleInputChange}
                   placeholder="e.g. vikram@example.com"
-                  className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
+                  className="w-full bg-transparent border-b border-stone-border/60 py-2.5 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors duration-300 rounded-none"
                 />
               </div>
 
               {/* Date, Time, Guests */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
                 <div>
-                  <label htmlFor="reservation_date" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+                  <label htmlFor="reservation_date" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
                     Date <span className="text-gold">*</span>
                   </label>
-                  <div className="relative">
-                    <input
-                      type="date"
-                      id="reservation_date"
-                      name="reservation_date"
-                      required
-                      min={today}
-                      value={formData.reservation_date}
-                      onChange={handleInputChange}
-                      className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
-                    />
-                  </div>
+                  <input
+                    type="date"
+                    id="reservation_date"
+                    name="reservation_date"
+                    required
+                    min={today}
+                    value={formData.reservation_date}
+                    onChange={handleInputChange}
+                    className="w-full bg-transparent border-b border-stone-border/60 py-2 px-1 text-xs font-light text-white focus:outline-none focus:border-gold transition-colors duration-300 rounded-none appearance-none"
+                  />
                 </div>
 
                 <div>
-                  <label htmlFor="reservation_time" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+                  <label htmlFor="reservation_time" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
                     Time Slot <span className="text-gold">*</span>
                   </label>
                   <select
@@ -273,17 +271,17 @@ const Reservation = () => {
                     required
                     value={formData.reservation_time}
                     onChange={handleInputChange}
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-stone-light rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 appearance-none cursor-pointer"
+                    className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs font-light text-stone/50 focus:outline-none focus:border-gold transition-colors duration-300 rounded-none appearance-none cursor-pointer"
                   >
-                    <option value="">Select Time</option>
+                    <option value="" className="bg-ebony-card text-stone/40">Select Time</option>
                     {TIME_SLOTS.map((time) => (
-                      <option key={time} value={time}>{time}</option>
+                      <option key={time} value={time} className="bg-ebony-card text-stone">{time}</option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label htmlFor="guest_count" className="block text-[10px] tracking-widest text-stone uppercase mb-2 font-medium">
+                  <label htmlFor="guest_count" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1 font-medium">
                     Guests <span className="text-gold">*</span>
                   </label>
                   <input
@@ -295,14 +293,14 @@ const Reservation = () => {
                     max="10"
                     value={formData.guest_count}
                     onChange={handleInputChange}
-                    className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300"
+                    className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs font-light text-white focus:outline-none focus:border-gold transition-colors duration-300 rounded-none"
                   />
                 </div>
               </div>
 
               {/* Special Requests */}
               <div>
-                <label htmlFor="special_requests" className="block text-[10px] tracking-widest text-stone uppercase mb-2">
+                <label htmlFor="special_requests" className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">
                   Special Requests / Dietary Notes
                 </label>
                 <textarea
@@ -311,8 +309,8 @@ const Reservation = () => {
                   rows="3"
                   value={formData.special_requests}
                   onChange={handleInputChange}
-                  placeholder="e.g. Requiring high chair for toddler, anniversary dinner, peanut allergies..."
-                  className="w-full bg-ebony-light border border-stone-border py-2.5 px-4 text-xs font-light text-white placeholder-stone/60 rounded-xl focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-300 resize-none"
+                  placeholder="Anniversary celebration, gluten allergies, or live teppanyaki preferences..."
+                  className="w-full bg-transparent border-b border-stone-border/60 py-2.5 text-xs font-light text-white placeholder-stone/30 focus:outline-none focus:border-gold transition-colors duration-300 resize-none rounded-none"
                 />
               </div>
 
@@ -320,7 +318,7 @@ const Reservation = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 disabled:bg-stone/50 disabled:text-stone-light rounded-xl shadow-lg cursor-pointer"
+                className="w-full py-4 bg-gold text-ebony font-sans text-xs font-medium tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 disabled:bg-stone-border/50 disabled:text-stone/40 shadow-md cursor-pointer"
               >
                 {loading ? 'Processing booking...' : 'Request Reservation'}
               </button>
@@ -339,37 +337,37 @@ const Reservation = () => {
           onClose={() => setSuccessModal(false)}
           title="Booking Request Submitted"
         >
-          <div className="flex flex-col items-center text-center space-y-4">
-            <CheckCircle className="w-16 h-16 text-gold animate-bounce" />
+          <div className="flex flex-col items-center text-center space-y-5 py-4">
+            <CheckCircle className="w-12 h-12 text-gold/80" />
             
-            <h4 className="font-serif text-lg font-bold text-white uppercase tracking-wider">
+            <h4 className="font-serif text-lg font-normal text-white uppercase tracking-wider">
               Thank You, {bookedDetails.customer_name}
             </h4>
             
-            <p className="text-xs leading-relaxed text-stone-light">
-              Reservation received successfully. Our team will contact you shortly.
+            <p className="text-xs leading-relaxed text-stone/60 max-w-sm">
+              Your dining request has been registered. Our host will confirm your booking details shortly.
             </p>
 
-            <div className="w-full bg-ebony border border-stone-border/40 p-4 text-left font-sans text-xs space-y-2.5 my-4 rounded-xl">
-              <div className="flex justify-between border-b border-stone-border/30 pb-2">
-                <span className="text-stone">Booking ID:</span>
-                <span className="font-semibold text-white">#SHR-{bookedDetails.id}</span>
+            <div className="w-full bg-ebony/60 border border-stone-border/40 p-5 text-left font-sans text-xs space-y-3 my-4">
+              <div className="flex justify-between border-b border-stone-border/20 pb-2">
+                <span className="text-stone/50">Booking ID</span>
+                <span className="font-medium text-white font-mono">#SHR-{bookedDetails.id}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone">Date:</span>
-                <span className="text-gold">{bookedDetails.reservation_date}</span>
+                <span className="text-stone/50">Date</span>
+                <span className="text-gold font-mono">{bookedDetails.reservation_date}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone">Time:</span>
-                <span className="text-gold">{bookedDetails.reservation_time}</span>
+                <span className="text-stone/50">Time Slot</span>
+                <span className="text-gold font-mono">{bookedDetails.reservation_time}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-stone">Guests:</span>
+                <span className="text-stone/50">Party Size</span>
                 <span className="text-white">{bookedDetails.guest_count} Persons</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-stone">Status:</span>
-                <span className="px-2 py-0.5 bg-gold/10 text-gold uppercase font-bold text-[10px] tracking-widest rounded">
+              <div className="flex justify-between items-center pt-2 border-t border-stone-border/20">
+                <span className="text-stone/50">Status</span>
+                <span className="px-2 py-0.5 bg-gold/5 text-gold border border-gold/30 uppercase font-mono text-[9px] tracking-wider">
                   {bookedDetails.status}
                 </span>
               </div>
@@ -377,7 +375,7 @@ const Reservation = () => {
 
             <button
               onClick={() => setSuccessModal(false)}
-              className="px-8 py-3 rounded-xl bg-gradient-to-r from-gold via-amber to-gold text-ebony font-sans text-xs uppercase tracking-widest hover:scale-105 hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 font-semibold cursor-pointer"
+              className="px-8 py-3 bg-gold text-ebony font-sans text-xs uppercase tracking-widest hover:bg-gold-hover transition-all duration-300 font-medium cursor-pointer"
             >
               Done
             </button>

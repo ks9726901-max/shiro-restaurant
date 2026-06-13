@@ -201,32 +201,32 @@ const DashboardMenu = () => {
   const menuItems = Array.isArray(items) ? items : FALLBACK_ITEMS;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 text-stone">
       {/* Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-stone-border/30 pb-6">
         <div>
-          <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
+          <h1 className="font-serif text-2xl font-normal uppercase tracking-wider text-white">
             Menu Management
           </h1>
-          <p className="text-xs font-light text-stone mt-1">
+          <p className="text-[11px] font-light text-stone/50 mt-1">
             Create, edit, or remove categories and culinary dishes.
           </p>
         </div>
 
-        <div className="flex space-x-3 text-xs font-sans">
+        <div className="flex space-x-3 text-[10px] tracking-widest uppercase font-medium">
           <button
             onClick={() => setCategoryModalOpen(true)}
-            className="px-4 py-2 border border-stone-border text-stone-light hover:border-gold hover:text-gold transition-all duration-300 flex items-center space-x-1.5"
+            className="px-4 py-2.5 border border-stone-border/60 text-stone/70 hover:border-gold hover:text-gold transition-all duration-300 flex items-center space-x-1.5 cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-3.5 h-3.5" />
             <span>Add Category</span>
           </button>
           
           <button
             onClick={handleAddItemClick}
-            className="px-4 py-2 bg-gold text-ebony font-bold hover:bg-gold-hover transition-all duration-300 flex items-center space-x-1.5 shadow-lg"
+            className="px-4 py-2.5 bg-gold text-ebony hover:bg-gold-hover transition-all duration-300 flex items-center space-x-1.5 shadow-md cursor-pointer"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-3.5 h-3.5" />
             <span>Add Menu Item</span>
           </button>
         </div>
@@ -234,67 +234,67 @@ const DashboardMenu = () => {
 
       {/* Offline Status Warning */}
       {error && (
-        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+        <div className="p-4 bg-amber/5 border border-amber/20 text-amber text-xs flex items-center space-x-2.5">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {/* Main Grid: Item List */}
-      <div className="bg-ebony-card border border-stone-border/40 p-8">
-        <h2 className="font-serif text-lg font-bold text-white uppercase tracking-wider mb-6">
+      <div className="bg-ebony-card border border-stone-border/30 p-8">
+        <h2 className="font-serif text-base font-normal text-white uppercase tracking-wider mb-6">
           Menu Items List
         </h2>
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
+            <div className="animate-spin rounded-full h-8 w-8 border-t border-b border-gold" />
           </div>
         ) : !Array.isArray(menuItems) || menuItems.length === 0 ? (
-          <div className="text-center py-12 text-stone font-light text-xs border border-dashed border-stone-border/20">
+          <div className="text-center py-12 text-stone/40 font-light text-xs border border-dashed border-stone-border/20">
             No dishes found. Click 'Add Menu Item' to populate.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left font-sans text-xs">
               <thead>
-                <tr className="border-b border-stone-border/60 text-stone uppercase text-[10px] tracking-widest">
+                <tr className="border-b border-stone-border/40 text-stone/45 uppercase text-[9px] tracking-widest">
                   <th className="pb-3 font-medium">Dish Name</th>
                   <th className="pb-3 font-medium">Category</th>
                   <th className="pb-3 font-medium">Price</th>
                   <th className="pb-3 font-medium">Tags</th>
                   <th className="pb-3 font-medium">Availability</th>
-                  <th className="pb-3 font-medium text-right">Moderator Panel</th>
+                  <th className="pb-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-stone-border/30">
+              <tbody className="divide-y divide-stone-border/20">
                 {(Array.isArray(menuItems) ? menuItems : []).map((item) => (
-                  <tr key={item.id} className="text-stone-light hover:bg-ebony-light/40 transition-colors">
+                  <tr key={item.id} className="text-stone/70 hover:bg-ebony-light/30 transition-colors">
                     <td className="py-4">
-                      <p className="font-semibold text-white">{item.name}</p>
-                      <p className="text-[10px] text-stone mt-0.5 max-w-sm truncate">{item.description}</p>
+                      <p className="font-semibold text-stone/90">{item.name}</p>
+                      <p className="text-[10px] text-stone/40 mt-1 max-w-sm truncate">{item.description}</p>
                     </td>
-                    <td className="py-4 font-serif text-gold-hover">{item.category_name}</td>
-                    <td className="py-4 font-semibold text-white">₹{item.price ? parseFloat(item.price).toFixed(2) : '0.00'}</td>
+                    <td className="py-4 font-serif text-gold">{item.category_name}</td>
+                    <td className="py-4 font-mono font-medium text-white">₹{item.price ? parseFloat(item.price).toFixed(2) : '0.00'}</td>
                     <td className="py-4">
-                      <div className="flex space-x-1">
+                      <div className="flex space-x-1.5">
                         {item.is_vegetarian && (
-                          <span className="p-1 bg-green-950 text-green-400 border border-green-500/10" title="Veg">
-                            <Leaf className="w-3.5 h-3.5" />
+                          <span className="text-[8px] border border-green-500/30 text-green-500/70 px-1 font-mono uppercase scale-90" title="Veg">
+                            VEG
                           </span>
                         )}
                         {item.is_signature && (
-                          <span className="p-1 bg-gold/10 text-gold border border-gold/10" title="Signature">
-                            <Star className="w-3.5 h-3.5 fill-current" />
+                          <span className="text-[8px] border border-gold/30 text-gold px-1 font-mono uppercase scale-90" title="Signature">
+                            SIG
                           </span>
                         )}
                       </div>
                     </td>
                     <td className="py-4">
-                      <span className={`px-2 py-0.5 font-bold uppercase text-[9px] tracking-widest ${
+                      <span className={`px-2 py-0.5 rounded-none font-medium uppercase text-[8px] tracking-widest ${
                         item.is_available 
-                          ? 'bg-green-950/20 text-green-400 border border-green-500/20' 
-                          : 'bg-red-950/20 text-red-400 border border-red-500/20'
+                          ? 'bg-gold/5 text-gold border border-gold/20' 
+                          : 'bg-stone-border/30 text-stone/40 border border-stone-border/20'
                       }`}>
                         {item.is_available ? 'Available' : 'Sold Out'}
                       </span>
@@ -303,14 +303,14 @@ const DashboardMenu = () => {
                       <div className="flex justify-end items-center space-x-2.5">
                         <button
                           onClick={() => handleEditItemClick(item)}
-                          className="p-1.5 border border-stone-border text-stone hover:border-gold hover:text-gold transition-colors"
+                          className="p-1.5 border border-stone-border/60 text-stone/50 hover:border-gold hover:text-gold transition-colors cursor-pointer"
                           title="Edit dish details"
                         >
                           <Edit2 className="w-3.5 h-3.5" />
                         </button>
                         <button
                           onClick={() => handleDeleteItem(item.id)}
-                          className="p-1.5 border border-stone-border text-stone hover:border-crimson hover:text-crimson transition-colors"
+                          className="p-1.5 border border-stone-border/60 text-stone/50 hover:border-crimson hover:text-crimson-bright transition-colors cursor-pointer"
                           title="Remove dish"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -331,42 +331,42 @@ const DashboardMenu = () => {
         onClose={() => setItemModalOpen(false)}
         title={editingItem ? 'Edit Menu Item' : 'Create Menu Item'}
       >
-        <form onSubmit={handleItemSubmit} className="space-y-5">
+        <form onSubmit={handleItemSubmit} className="space-y-6">
           {error && (
-            <div className="p-3 bg-crimson/10 border border-crimson/30 text-crimson text-xs flex items-center space-x-2">
+            <div className="p-3 bg-crimson/15 border border-crimson/30 text-crimson-bright text-xs flex items-center space-x-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
           )}
 
           <div>
-            <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Category</label>
+            <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-2">Category</label>
             <select
               value={itemForm.category_id}
               onChange={(e) => setItemForm({ ...itemForm, category_id: e.target.value })}
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-stone-light focus:outline-none focus:border-gold rounded-none"
+              className="w-full bg-transparent border-b border-stone-border/60 py-2.5 text-xs text-stone/60 focus:outline-none focus:border-gold rounded-none appearance-none cursor-pointer"
             >
               {(Array.isArray(menuCategories) ? menuCategories : []).map(c => (
-                <option key={c.id} value={c.id}>{c.name}</option>
+                <option key={c.id} value={c.id} className="bg-ebony-card text-stone">{c.name}</option>
               ))}
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Name</label>
+              <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Name</label>
               <input
                 type="text"
                 required
                 value={itemForm.name}
                 onChange={(e) => setItemForm({ ...itemForm, name: e.target.value })}
                 placeholder="Dish name"
-                className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white placeholder-stone/50 focus:outline-none focus:border-gold"
+                className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white placeholder-stone/30 focus:outline-none focus:border-gold rounded-none"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Price (₹)</label>
+              <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Price (₹)</label>
               <input
                 type="number"
                 required
@@ -374,79 +374,79 @@ const DashboardMenu = () => {
                 value={itemForm.price}
                 onChange={(e) => setItemForm({ ...itemForm, price: e.target.value })}
                 placeholder="Price"
-                className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white placeholder-stone/50 focus:outline-none focus:border-gold"
+                className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white placeholder-stone/30 focus:outline-none focus:border-gold rounded-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Description</label>
+            <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Description</label>
             <textarea
               rows="2"
               value={itemForm.description}
               onChange={(e) => setItemForm({ ...itemForm, description: e.target.value })}
-              placeholder="Description of flavours, presentation, ingredients..."
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white placeholder-stone/50 focus:outline-none focus:border-gold resize-none"
+              placeholder="Flavors, presentation, key ingredients..."
+              className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white placeholder-stone/30 focus:outline-none focus:border-gold resize-none rounded-none"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Image URL</label>
+            <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Image URL</label>
             <input
               type="text"
               value={itemForm.image_url}
               onChange={(e) => setItemForm({ ...itemForm, image_url: e.target.value })}
               placeholder="https://images.unsplash.com/..."
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white placeholder-stone/50 focus:outline-none focus:border-gold"
+              className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white placeholder-stone/30 focus:outline-none focus:border-gold rounded-none"
             />
           </div>
 
           {/* Toggle Switches */}
           <div className="grid grid-cols-3 gap-2 py-2 text-xs">
-            <label className="flex items-center space-x-2 cursor-pointer text-stone hover:text-gold-hover">
+            <label className="flex items-center space-x-2 cursor-pointer text-stone/60 hover:text-gold">
               <input
                 type="checkbox"
                 checked={itemForm.is_vegetarian}
                 onChange={(e) => setItemForm({ ...itemForm, is_vegetarian: e.target.checked })}
-                className="accent-gold"
+                className="accent-gold scale-95"
               />
               <span>Vegetarian</span>
             </label>
 
-            <label className="flex items-center space-x-2 cursor-pointer text-stone hover:text-gold-hover">
+            <label className="flex items-center space-x-2 cursor-pointer text-stone/60 hover:text-gold">
               <input
                 type="checkbox"
                 checked={itemForm.is_vegan}
                 onChange={(e) => setItemForm({ ...itemForm, is_vegan: e.target.checked })}
-                className="accent-gold"
+                className="accent-gold scale-95"
               />
               <span>Vegan</span>
             </label>
 
-            <label className="flex items-center space-x-2 cursor-pointer text-stone hover:text-gold-hover">
+            <label className="flex items-center space-x-2 cursor-pointer text-stone/60 hover:text-gold">
               <input
                 type="checkbox"
                 checked={itemForm.is_signature}
                 onChange={(e) => setItemForm({ ...itemForm, is_signature: e.target.checked })}
-                className="accent-gold"
+                className="accent-gold scale-95"
               />
               <span>Signature</span>
             </label>
           </div>
 
-          <label className="flex items-center space-x-2 cursor-pointer text-xs text-stone hover:text-gold-hover pb-3 border-b border-stone-border/40">
+          <label className="flex items-center space-x-2 cursor-pointer text-xs text-stone/60 hover:text-gold pb-3 border-b border-stone-border/30">
             <input
               type="checkbox"
               checked={itemForm.is_available}
               onChange={(e) => setItemForm({ ...itemForm, is_available: e.target.checked })}
-              className="accent-gold"
+              className="accent-gold scale-95"
             />
             <span>Available for purchase (In Stock)</span>
           </label>
 
           <button
             type="submit"
-            className="w-full py-3 bg-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 shadow-lg"
+            className="w-full py-3.5 bg-gold text-ebony font-sans text-xs font-medium tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 shadow-md cursor-pointer"
           >
             {editingItem ? 'Save Changes' : 'Create Item'}
           </button>
@@ -459,43 +459,43 @@ const DashboardMenu = () => {
         onClose={() => setCategoryModalOpen(false)}
         title="Add Menu Category"
       >
-        <form onSubmit={handleCategorySubmit} className="space-y-5">
+        <form onSubmit={handleCategorySubmit} className="space-y-6">
           <div>
-            <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Category Name</label>
+            <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Category Name</label>
             <input
               type="text"
               required
               value={categoryForm.name}
               onChange={(e) => setCategoryForm({ ...categoryForm, name: e.target.value })}
               placeholder="e.g. Dim Sum, Main Course"
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white placeholder-stone/50 focus:outline-none focus:border-gold"
+              className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white placeholder-stone/30 focus:outline-none focus:border-gold rounded-none"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Description</label>
+            <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Description</label>
             <textarea
               rows="2"
               value={categoryForm.description}
               onChange={(e) => setCategoryForm({ ...categoryForm, description: e.target.value })}
               placeholder="Brief description of category items"
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white placeholder-stone/50 focus:outline-none focus:border-gold resize-none"
+              className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white placeholder-stone/30 focus:outline-none focus:border-gold resize-none rounded-none"
             />
           </div>
 
           <div>
-            <label className="block text-[10px] tracking-widest text-stone uppercase mb-2">Display Order (Sorting)</label>
+            <label className="block text-[9px] tracking-widest text-stone/50 uppercase mb-1">Display Order (Sorting)</label>
             <input
               type="number"
               value={categoryForm.display_order}
               onChange={(e) => setCategoryForm({ ...categoryForm, display_order: parseInt(e.target.value, 10) || 0 })}
-              className="w-full bg-ebony-light border border-stone-border py-2 px-3 text-xs text-white focus:outline-none focus:border-gold"
+              className="w-full bg-transparent border-b border-stone-border/60 py-2 text-xs text-white focus:outline-none focus:border-gold rounded-none"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-gold text-ebony font-sans text-xs font-bold tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 shadow-lg"
+            className="w-full py-3.5 bg-gold text-ebony font-sans text-xs font-medium tracking-widest uppercase hover:bg-gold-hover transition-all duration-300 shadow-md cursor-pointer"
           >
             Create Category
           </button>

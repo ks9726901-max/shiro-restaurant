@@ -110,21 +110,21 @@ const DashboardReports = () => {
     : 'N/A';
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 text-stone">
       
       {/* Title */}
-      <div>
-        <h1 className="font-serif text-2xl font-bold uppercase tracking-wider text-white">
+      <div className="border-b border-stone-border/30 pb-6">
+        <h1 className="font-serif text-2xl font-normal uppercase tracking-wider text-white">
           Reports & Analytics
         </h1>
-        <p className="text-xs font-light text-stone mt-1">
-          Detailed metrics of guest reservations, busy hour intervals, and menu category distributions.
+        <p className="text-[11px] font-light text-stone/50 mt-1">
+          Operational statistics, busy service hours, and menu split metrics.
         </p>
       </div>
 
       {/* Offline Status Warning */}
       {error && (
-        <div className="p-3.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs flex items-center space-x-2.5">
+        <div className="p-4 bg-amber/5 border border-amber/20 text-amber text-xs flex items-center space-x-2.5">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -132,43 +132,45 @@ const DashboardReports = () => {
 
       {loading ? (
         <div className="flex justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
+          <div className="animate-spin rounded-full h-8 w-8 border-t border-b border-gold" />
         </div>
       ) : (
         <div className="space-y-8">
           
           {/* Executive Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-ebony-card border border-stone-border/40 p-6 flex items-center justify-between rounded-lg">
-              <div>
-                <p className="text-[9px] tracking-widest uppercase text-stone">Weekly Forecasted Bookings</p>
-                <h3 className="font-serif text-2xl font-bold mt-1 text-white">{totalProjectedBookings} Bookings</h3>
+            <div className="bg-ebony-card border border-stone-border/30 p-6 flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-[9px] tracking-widest uppercase text-stone/40">Weekly Forecasted Bookings</p>
+                <h3 className="font-serif text-2xl font-normal text-white">{totalProjectedBookings} Bookings</h3>
               </div>
-              <TrendingUp className="w-8 h-8 text-gold stroke-[1.25]" />
+              <TrendingUp className="w-6 h-6 text-gold/60 stroke-[1.25]" />
             </div>
-            <div className="bg-ebony-card border border-stone-border/40 p-6 flex items-center justify-between rounded-lg">
-              <div>
-                <p className="text-[9px] tracking-widest uppercase text-stone">Busy Service Hour</p>
-                <h3 className="font-serif text-2xl font-bold mt-1 text-white">{peakTimeSlot} hrs</h3>
+            
+            <div className="bg-ebony-card border border-stone-border/30 p-6 flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-[9px] tracking-widest uppercase text-stone/40">Peak Service Hour</p>
+                <h3 className="font-serif text-2xl font-normal text-white">{peakTimeSlot} hrs</h3>
               </div>
-              <Clock className="w-8 h-8 text-amber stroke-[1.25]" />
+              <Clock className="w-6 h-6 text-gold/60 stroke-[1.25]" />
             </div>
-            <div className="bg-ebony-card border border-stone-border/40 p-6 flex items-center justify-between rounded-lg">
-              <div>
-                <p className="text-[9px] tracking-widest uppercase text-stone">Top Featured Category</p>
-                <h3 className="font-serif text-2xl font-bold mt-1 text-white truncate max-w-[200px]">{topMenuCategory}</h3>
+            
+            <div className="bg-ebony-card border border-stone-border/30 p-6 flex items-center justify-between">
+              <div className="space-y-1">
+                <p className="text-[9px] tracking-widest uppercase text-stone/40">Top Menu Category</p>
+                <h3 className="font-serif text-2xl font-normal text-white truncate max-w-[180px]">{topMenuCategory}</h3>
               </div>
-              <PieChart className="w-8 h-8 text-gold stroke-[1.25]" />
+              <PieChart className="w-6 h-6 text-gold/60 stroke-[1.25]" />
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
             {/* Chart 1: Reservation Daily Trends */}
-            <div className="bg-ebony-card border border-stone-border/40 p-8 flex flex-col justify-between rounded-lg shadow-lg">
-              <div className="flex items-center space-x-2.5 border-b border-stone-border/30 pb-4 mb-6">
-                <TrendingUp className="w-5 h-5 text-gold" />
-                <h2 className="font-serif text-base font-bold text-white uppercase tracking-wider">
+            <div className="bg-ebony-card border border-stone-border/30 p-8 flex flex-col justify-between">
+              <div className="flex items-center space-x-3 border-b border-stone-border/30 pb-4 mb-6">
+                <TrendingUp className="w-4 h-4 text-gold/60" />
+                <h2 className="font-serif text-base font-normal text-white uppercase tracking-wider">
                   Booking Daily Trends
                 </h2>
               </div>
@@ -179,20 +181,20 @@ const DashboardReports = () => {
                   const percent = ((t.count || 0) / maxTrendCount) * 100;
                   return (
                     <div key={idx} className="flex-1 flex flex-col items-center group">
-                      <div className="w-full relative flex flex-col justify-end h-48 bg-ebony-light/40 border border-stone-border/20 rounded-t-sm">
-                        {/* Bar fill with gold glow */}
+                      <div className="w-full relative flex flex-col justify-end h-48 bg-ebony-light/20 border border-stone-border/20">
+                        {/* Bar fill (Clean antique gold, no radial glow shadows) */}
                         <div 
                           style={{ height: `${percent}%` }}
-                          className="w-full bg-gradient-to-t from-gold/10 via-gold/40 to-gold-hover border-t-2 border-gold transition-all duration-500 relative shadow-[0_0_15px_rgba(212,175,55,0.15)] hover:from-gold/25 hover:via-gold/60 hover:to-gold-hover hover:shadow-[0_0_25px_rgba(212,175,55,0.4)] cursor-pointer"
+                          className="w-full bg-gold-dark/30 hover:bg-gold/60 border-t border-gold transition-all duration-300 relative cursor-pointer"
                         >
                           {/* Hover Tooltip */}
-                          <span className="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-gold text-ebony text-[9px] font-bold px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-md z-10">
-                            {t.count} bookings
+                          <span className="absolute -top-7 left-1/2 transform -translate-x-1/2 bg-ebony-card border border-gold/30 text-gold text-[8px] font-mono font-bold px-2 py-0.5 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                            {t.count}
                           </span>
                         </div>
                       </div>
                       {/* Date label */}
-                      <span className="text-[9px] text-stone mt-2.5 truncate w-full text-center">
+                      <span className="text-[9px] text-stone/40 mt-2.5 truncate w-full text-center">
                         {t.date ? t.date.slice(5) : 'N/A'}
                       </span>
                     </div>
@@ -202,10 +204,10 @@ const DashboardReports = () => {
             </div>
 
             {/* Chart 2: Busy Time Slots */}
-            <div className="bg-ebony-card border border-stone-border/40 p-8 rounded-lg shadow-lg">
-              <div className="flex items-center space-x-2.5 border-b border-stone-border/30 pb-4 mb-6">
-                <Clock className="w-5 h-5 text-gold" />
-                <h2 className="font-serif text-base font-bold text-white uppercase tracking-wider">
+            <div className="bg-ebony-card border border-stone-border/30 p-8">
+              <div className="flex items-center space-x-3 border-b border-stone-border/30 pb-4 mb-6">
+                <Clock className="w-4 h-4 text-gold/60" />
+                <h2 className="font-serif text-base font-normal text-white uppercase tracking-wider">
                   Peak Booking Slots
                 </h2>
               </div>
@@ -216,14 +218,14 @@ const DashboardReports = () => {
                   const percent = ((slot.count || 0) / maxSlotCount) * 100;
                   return (
                     <div key={idx} className="space-y-1.5">
-                      <div className="flex justify-between text-[11px]">
-                        <span className="font-semibold text-white">{slot.time} hrs</span>
-                        <span className="text-gold">{slot.count} active reservations</span>
+                      <div className="flex justify-between text-[10px] tracking-wide">
+                        <span className="font-medium text-stone/90">{slot.time} hrs</span>
+                        <span className="text-gold font-mono">{slot.count} bookings</span>
                       </div>
-                      <div className="w-full h-3 bg-ebony-light border border-stone-border/30 rounded-sm overflow-hidden">
+                      <div className="w-full h-2 bg-ebony-light/30 border border-stone-border/20 rounded-none overflow-hidden">
                         <div 
                           style={{ width: `${percent}%` }}
-                          className="h-full bg-gradient-to-r from-amber/20 via-amber/60 to-amber border-r-2 border-amber transition-all duration-700 shadow-[0_0_10px_rgba(255,179,71,0.15)]"
+                          className="h-full bg-gold/30 border-r border-gold transition-all duration-500"
                         />
                       </div>
                     </div>
@@ -233,34 +235,34 @@ const DashboardReports = () => {
             </div>
 
             {/* Chart 3: Menu Categories Split */}
-            <div className="bg-ebony-card border border-stone-border/40 p-8 lg:col-span-2 rounded-lg shadow-lg">
-              <div className="flex items-center space-x-2.5 border-b border-stone-border/30 pb-4 mb-6">
-                <PieChart className="w-5 h-5 text-gold" />
-                <h2 className="font-serif text-base font-bold text-white uppercase tracking-wider">
-                  Menu Item Splits
+            <div className="bg-ebony-card border border-stone-border/30 p-8 lg:col-span-2">
+              <div className="flex items-center space-x-3 border-b border-stone-border/30 pb-4 mb-6">
+                <PieChart className="w-4 h-4 text-gold/60" />
+                <h2 className="font-serif text-base font-normal text-white uppercase tracking-wider">
+                  Menu Item Distributions
                 </h2>
               </div>
 
               {/* Matrix grid showing splits */}
               <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
                 {safeMenuSplit.map((item, idx) => (
-                  <div key={idx} className="bg-ebony-light/50 border border-stone-border/60 p-5 text-center flex flex-col justify-between hover:border-gold/30 hover:shadow-[0_4px_20px_rgba(212,175,55,0.05)] transition-all duration-300 rounded-lg group">
+                  <div key={idx} className="bg-ebony-light/20 border border-stone-border/30 p-5 text-center flex flex-col justify-between hover:border-gold/30 transition-all duration-300 rounded-none group">
                     <div>
-                      <span className="text-[9px] tracking-wider uppercase text-stone block mb-1">
+                      <span className="text-[8px] tracking-widest uppercase text-stone/40 block mb-1">
                         Category
                       </span>
-                      <h4 className="font-serif text-xs font-semibold text-gold-hover truncate">
+                      <h4 className="font-serif text-xs font-normal text-gold truncate">
                         {item.category}
                       </h4>
                     </div>
                     <div className="my-4">
-                      <span className="text-2xl font-bold text-white font-serif tracking-tight group-hover:text-gold transition-colors duration-300">{item.count}</span>
-                      <span className="text-[10px] text-stone block mt-0.5">Dishes</span>
+                      <span className="text-2xl font-serif font-normal text-white tracking-tight group-hover:text-gold transition-colors duration-300">{item.count}</span>
+                      <span className="text-[9px] text-stone/40 block mt-0.5 uppercase tracking-wider">Dishes</span>
                     </div>
-                    <div className="w-full h-1 bg-ebony border border-stone-border/40 rounded-sm overflow-hidden">
+                    <div className="w-full h-1 bg-ebony border border-stone-border/30 rounded-none overflow-hidden">
                       <div 
                         style={{ width: `${((item.count || 0) / maxMenuCount) * 100}%` }}
-                        className="h-full bg-gradient-to-r from-gold/40 to-gold border-r border-gold-hover transition-all duration-500"
+                        className="h-full bg-gold/20 border-r border-gold/40 transition-all duration-500"
                       />
                     </div>
                   </div>
