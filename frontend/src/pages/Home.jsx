@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Compass, Sparkles, Flame, Wine, ChevronDown, ChevronLeft, ChevronRight, Quote, Award } from 'lucide-react';
+import GoogleMapSection from '../components/GoogleMapSection';
 
 const Home = () => {
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -445,6 +446,9 @@ const Home = () => {
           </button>
         </div>
       </section>
+
+      {/* Interactive Map Section */}
+      <GoogleMapSection />
 
       {/* 7. Reservation CTA Banner */}
       <section className="relative py-28 px-6 text-center">
